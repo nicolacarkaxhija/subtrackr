@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+coverage
+web-build
+.expo
+.changeset/*.md
+pnpm-lock.yaml
+CHANGELOG.md

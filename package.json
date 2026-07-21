@@ -1,0 +1,43 @@
+{
+  "name": "subtrackr",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Privacy-first subscription tracker — on-device, no bank linking.",
+  "license": "SEE LICENSE IN LICENSE",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @subtrackr/mobile dev",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test -- --coverage",
+    "test": "pnpm -r --if-present test",
+    "test:watch": "pnpm --filter @subtrackr/domain test:watch",
+    "test:mutation": "pnpm --filter @subtrackr/domain test:mutation",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "eslint . && pnpm boundaries",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "boundaries": "depcruise packages --config .dependency-cruiser.cjs",
+    "e2e:web": "pnpm --filter @subtrackr/mobile e2e:web",
+    "e2e:mobile": "maestro test .maestro",
+    "changeset": "changeset",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@eslint/js": "^9.12.0",
+    "@types/node": "^22.7.0",
+    "dependency-cruiser": "^16.4.0",
+    "eslint": "^9.12.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.8.0"
+  }
+}
