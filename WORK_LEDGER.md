@@ -10,6 +10,10 @@ section.
 
 | Commit (type/scope) | Summary | Est. human effort |
 | --- | --- | --- |
+| `ci: deferred CI/CD workflows` | GitHub Actions CI + release workflows, gated off via `CI_ENABLED` until credits return | 1.5 – 2.5 h |
+| `feat: DateOnly + BillingCycle` | Two pure value objects with month-end/leap-year renewal math; unit tables + fast-check property tests | 4 – 6 h |
+| `chore: scaffold domain package` | Domain package with strict tsconfig, Vitest (100% gate), Stryker config | 0.5 – 1 h |
+| `chore: workspace tooling + gates` | pnpm workspace, ESLint flat + domain-purity rules, Prettier, commitlint, lint-staged, Changesets, dependency-cruiser, Husky hooks | 3 – 5 h |
 | `docs: process and privacy docs` | Testing strategy, CI/CD, coding standards, contributing; privacy policy, DPIA, data inventory | 5 – 8 h |
 | `docs: tech spec + module designs` | Tech-spec registry, architecture overview + ports, config-registry/data-model/repository-sync module docs | 5 – 8 h |
 | `docs: PRD + feature specs` | PRD registry, 8 feature specs with edge cases + acceptance criteria, template | 5 – 7 h |
@@ -24,9 +28,9 @@ section.
 
 | Metric | Value |
 | --- | --- |
-| Commits logged | 5 |
-| Estimated human effort (low) | 20.5 h |
-| Estimated human effort (high) | 31.5 h |
+| Commits logged | 9 |
+| Estimated human effort (low) | 29.5 h |
+| Estimated human effort (high) | 46 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
