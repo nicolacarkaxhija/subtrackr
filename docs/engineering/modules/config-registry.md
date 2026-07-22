@@ -1,7 +1,8 @@
 ---
 id: mod-config-registry
 title: Feature/Config Resolution Engine
-status: draft
+status: living
+implemented: packages/domain/src/features/feature-registry.ts
 owner: nicola
 updated: 2026-07-21
 related: [adr-0006, adr-0005, adr-0001]
