@@ -37,5 +37,5 @@ native features where available and degrade gracefully where not.
 - Web is a **secondary** surface (see ADR 0004): `react-native-web` yields a working
   but not best-in-class PWA; some native features are degraded on web.
 - Feature availability becomes **platform-dependent**, which is modeled explicitly as
-  the *capability* axis of the feature registry (ADR 0006).
+  the _capability_ axis of the feature registry (ADR 0006).
 - CI must eventually cover three targets, including device-based mobile E2E.

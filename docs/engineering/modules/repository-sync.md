@@ -15,8 +15,8 @@ related: [adr-0002, adr-0003, mod-data-model]
 interface Repository<T extends Entity> {
   get(id: string): Promise<T | null>;
   query(spec: QuerySpec<T>): Promise<T[]>;
-  save(entity: T): Promise<void>;       // upsert; bumps version + updatedAt
-  softDelete(id: string): Promise<void>;// sets deletedAt; keeps row for sync
+  save(entity: T): Promise<void>; // upsert; bumps version + updatedAt
+  softDelete(id: string): Promise<void>; // sets deletedAt; keeps row for sync
   transaction<R>(fn: (tx: RepoTx) => Promise<R>): Promise<R>;
 }
 ```
@@ -30,7 +30,7 @@ interface Repository<T extends Entity> {
 
 ```ts
 interface SyncProvider {
-  status(): SyncStatus;                 // disabled | idle | syncing | error
+  status(): SyncStatus; // disabled | idle | syncing | error
   push(changes: ChangeSet): Promise<void>;
   pull(since: Cursor): Promise<ChangeSet>;
   resolve(conflict: Conflict): Resolution; // last-writer-wins by (version, updatedAt)
@@ -49,7 +49,7 @@ interface SyncProvider {
 ## Change tracking
 
 - Every `save`/`softDelete` appends to a local `change_log` keyed by `(entity, id,
-  version)`. Sync ships the log; `Cursor` is the last-acked version vector.
+version)`. Sync ships the log; `Cursor` is the last-acked version vector.
 - Conflict policy v1: **last-writer-wins** by `(version, updatedAt)`; the design leaves
   room to upgrade specific entities to CRDT merge (e.g. usage counts) later.
 

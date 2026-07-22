@@ -14,12 +14,12 @@ where correctness matters most (money + dates), pragmatic elsewhere.
 
 ## The pyramid
 
-| Layer | Scope | Tools | Bar |
-| --- | --- | --- | --- |
-| **Domain core** | entities, value objects, use cases, feature registry | Vitest + **fast-check** (property) + **Stryker** (mutation) | ~100% lines/branches; mutation score ≥ 85% |
-| **Adapters/persistence** | repository, sync, catalog search | Vitest integration + real SQLite (native harness / WASM) | contract tests pass on both adapters |
-| **UI** | components, screens | React Native Testing Library | behaviour of critical flows; no vanity % |
-| **E2E** | user journeys | **Maestro** (mobile), **Playwright** (web) | happy paths + key edge journeys green |
+| Layer                    | Scope                                                | Tools                                                       | Bar                                        |
+| ------------------------ | ---------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------ |
+| **Domain core**          | entities, value objects, use cases, feature registry | Vitest + **fast-check** (property) + **Stryker** (mutation) | ~100% lines/branches; mutation score ≥ 85% |
+| **Adapters/persistence** | repository, sync, catalog search                     | Vitest integration + real SQLite (native harness / WASM)    | contract tests pass on both adapters       |
+| **UI**                   | components, screens                                  | React Native Testing Library                                | behaviour of critical flows; no vanity %   |
+| **E2E**                  | user journeys                                        | **Maestro** (mobile), **Playwright** (web)                  | happy paths + key edge journeys green      |
 
 ## Coverage gates (per package, enforced locally + CI)
 

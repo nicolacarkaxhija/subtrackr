@@ -35,15 +35,15 @@ hexagon; everything platform-specific is an adapter plugged into a port.
 
 ## Ports (interfaces owned by the domain)
 
-| Port | Purpose | v1 adapter(s) |
-| --- | --- | --- |
-| `Repository<T>` | CRUD + query for entities | SQLite native (`op-sqlite`), web (WASM) |
-| `SyncProvider` | Push/pull encrypted state | local no-op (iCloud/Drive later) |
-| `Clock` | Current time, timezone | system clock (fake in tests) |
-| `Rates` | Currency conversion | bundled rate table |
-| `Ocr` | Image → extracted fields | VisionKit / ML Kit / WASM |
-| `Notifier` | Schedule/cancel local notifications | expo-notifications |
-| `ConfigSource` | Read/write flags & preferences | on-device store (remote seam later) |
+| Port            | Purpose                             | v1 adapter(s)                           |
+| --------------- | ----------------------------------- | --------------------------------------- |
+| `Repository<T>` | CRUD + query for entities           | SQLite native (`op-sqlite`), web (WASM) |
+| `SyncProvider`  | Push/pull encrypted state           | local no-op (iCloud/Drive later)        |
+| `Clock`         | Current time, timezone              | system clock (fake in tests)            |
+| `Rates`         | Currency conversion                 | bundled rate table                      |
+| `Ocr`           | Image → extracted fields            | VisionKit / ML Kit / WASM               |
+| `Notifier`      | Schedule/cancel local notifications | expo-notifications                      |
+| `ConfigSource`  | Read/write flags & preferences      | on-device store (remote seam later)     |
 
 ## Rules
 

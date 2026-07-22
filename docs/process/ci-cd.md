@@ -15,16 +15,16 @@ hooks.
 
 ## Stages
 
-| Trigger | Stage | Jobs |
-| --- | --- | --- |
-| **commit** (local hook) | pre-commit | lint-staged (Prettier + ESLint on staged), typecheck changed |
-| **commit-msg** (local hook) | commit-msg | commitlint (Conventional Commits) |
-| **push** (local hook) | pre-push | `pnpm verify` (lint + typecheck + unit/integration + coverage gates) |
-| **PR** (CI, deferred) | verify | install → lint → typecheck → test + coverage → dependency-cruiser boundaries → build (all targets) |
-| **PR** (CI, deferred) | mutation | Stryker on `packages/domain` (required for release PRs) |
-| **PR** (CI, deferred) | e2e | Playwright (web) always; Maestro (mobile) on device runners |
-| **merge to main** (CI, deferred) | release | Changesets version + CHANGELOG + tag; build web PWA + deploy; EAS build (mobile) |
-| **release tag** (CI, deferred) | publish | EAS Submit — **gated**: off until Apple/Google accounts + secrets exist |
+| Trigger                          | Stage      | Jobs                                                                                               |
+| -------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| **commit** (local hook)          | pre-commit | lint-staged (Prettier + ESLint on staged), typecheck changed                                       |
+| **commit-msg** (local hook)      | commit-msg | commitlint (Conventional Commits)                                                                  |
+| **push** (local hook)            | pre-push   | `pnpm verify` (lint + typecheck + unit/integration + coverage gates)                               |
+| **PR** (CI, deferred)            | verify     | install → lint → typecheck → test + coverage → dependency-cruiser boundaries → build (all targets) |
+| **PR** (CI, deferred)            | mutation   | Stryker on `packages/domain` (required for release PRs)                                            |
+| **PR** (CI, deferred)            | e2e        | Playwright (web) always; Maestro (mobile) on device runners                                        |
+| **merge to main** (CI, deferred) | release    | Changesets version + CHANGELOG + tag; build web PWA + deploy; EAS build (mobile)                   |
+| **release tag** (CI, deferred)   | publish    | EAS Submit — **gated**: off until Apple/Google accounts + secrets exist                            |
 
 ## Branch & merge model
 

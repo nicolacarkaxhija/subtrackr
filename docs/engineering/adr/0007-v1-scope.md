@@ -1,6 +1,6 @@
 ---
 id: adr-0007
-title: "v1 scope: wedge + optimization"
+title: 'v1 scope: wedge + optimization'
 status: accepted
 date: 2026-07-21
 related: [adr-0004, prd]
@@ -18,6 +18,7 @@ pyramid is too large for a first release. We need a deliberate cut.
 **v1 = wedge + optimization.**
 
 **In v1:**
+
 - Core: catalog, on-device OCR (mobile), manual entry, local reminders, local storage
 - Free-trial **grace-period countdowns**
 - **CSV export** (data portability)
@@ -26,6 +27,7 @@ pyramid is too large for a first release. We need a deliberate cut.
 - **Cost-per-use** tracking
 
 **Deferred but designed-for:**
+
 - **Price-hike alerts** (needs a price feed → arrives with backend/remote config)
 - **E2E cloud sync** (iCloud/Drive, user-held key)
 

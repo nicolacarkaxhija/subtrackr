@@ -34,10 +34,10 @@ link. No account. No server that sees your data.
 
 ## Platforms
 
-| Platform | Status | Notes |
-| --- | --- | --- |
-| iOS | Primary | Full OCR (VisionKit), local notifications |
-| Android | Primary | Full OCR (ML Kit), local notifications |
+| Platform  | Status    | Notes                                     |
+| --------- | --------- | ----------------------------------------- |
+| iOS       | Primary   | Full OCR (VisionKit), local notifications |
+| Android   | Primary   | Full OCR (ML Kit), local notifications    |
 | Web (PWA) | Secondary | WASM-SQLite; degraded OCR & notifications |
 
 ## Documentation

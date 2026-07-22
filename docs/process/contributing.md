@@ -28,14 +28,14 @@ pnpm dev              # start Expo; pick platform
 
 ## Everyday commands
 
-| Command | Does |
-| --- | --- |
-| `pnpm verify` | lint + typecheck + unit/integration + coverage (the local CI gate) |
-| `pnpm test` | unit/integration (watch: `pnpm test:watch`) |
-| `pnpm test:mutation` | Stryker on the domain core |
-| `pnpm lint` / `pnpm format` | ESLint / Prettier |
-| `pnpm typecheck` | `tsc --noEmit` across the workspace |
-| `pnpm e2e:web` / `pnpm e2e:mobile` | Playwright / Maestro |
+| Command                            | Does                                                               |
+| ---------------------------------- | ------------------------------------------------------------------ |
+| `pnpm verify`                      | lint + typecheck + unit/integration + coverage (the local CI gate) |
+| `pnpm test`                        | unit/integration (watch: `pnpm test:watch`)                        |
+| `pnpm test:mutation`               | Stryker on the domain core                                         |
+| `pnpm lint` / `pnpm format`        | ESLint / Prettier                                                  |
+| `pnpm typecheck`                   | `tsc --noEmit` across the workspace                                |
+| `pnpm e2e:web` / `pnpm e2e:mobile` | Playwright / Maestro                                               |
 
 ## TDD loop (required for domain logic)
 

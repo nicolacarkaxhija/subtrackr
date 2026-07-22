@@ -1,6 +1,6 @@
 ---
 id: adr-0005
-title: "Freemium: free core + one-time Pro"
+title: 'Freemium: free core + one-time Pro'
 status: accepted
 date: 2026-07-21
 related: [adr-0006, adr-0011]
@@ -21,7 +21,7 @@ features (e.g. OCR beyond a quota, unlimited subscriptions, advanced analytics, 
 export, future E2E cloud sync). **No ads, no trackers.**
 
 Entitlement is a **two-state** model (`free` | `pro`) with **no expiry logic**,
-resolved as the *entitlement* axis of the feature registry (ADR 0006).
+resolved as the _entitlement_ axis of the feature registry (ADR 0006).
 
 ## Alternatives considered
 

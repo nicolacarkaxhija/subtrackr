@@ -39,16 +39,16 @@ via Plaid. There is no tracker that is **both** low-friction **and** truly priva
 
 ## 5. v1 scope (see ADR 0007)
 
-| Feature | Spec | Tier |
-| --- | --- | --- |
-| Smart catalog | [features/catalog.md](./features/catalog.md) | Free |
-| On-device OCR (mobile) | [features/ocr.md](./features/ocr.md) | Pro (quota-gated) |
-| Manual entry | [features/manual-entry.md](./features/manual-entry.md) | Free |
-| Renewal & grace-period reminders | [features/reminders.md](./features/reminders.md) | Free |
-| Spend analytics (multi-currency) | [features/analytics.md](./features/analytics.md) | Free/Pro |
-| Shared-plan splitting | [features/shared-plan-split.md](./features/shared-plan-split.md) | Free |
-| Cost-per-use | [features/cost-per-use.md](./features/cost-per-use.md) | Free |
-| CSV export | [features/csv-export.md](./features/csv-export.md) | Pro |
+| Feature                          | Spec                                                             | Tier              |
+| -------------------------------- | ---------------------------------------------------------------- | ----------------- |
+| Smart catalog                    | [features/catalog.md](./features/catalog.md)                     | Free              |
+| On-device OCR (mobile)           | [features/ocr.md](./features/ocr.md)                             | Pro (quota-gated) |
+| Manual entry                     | [features/manual-entry.md](./features/manual-entry.md)           | Free              |
+| Renewal & grace-period reminders | [features/reminders.md](./features/reminders.md)                 | Free              |
+| Spend analytics (multi-currency) | [features/analytics.md](./features/analytics.md)                 | Free/Pro          |
+| Shared-plan splitting            | [features/shared-plan-split.md](./features/shared-plan-split.md) | Free              |
+| Cost-per-use                     | [features/cost-per-use.md](./features/cost-per-use.md)           | Free              |
+| CSV export                       | [features/csv-export.md](./features/csv-export.md)               | Pro               |
 
 **Deferred (designed-for):** price-hike alerts, E2E cloud sync.
 
@@ -69,13 +69,13 @@ via Plaid. There is no tracker that is **both** low-friction **and** truly priva
 
 ## 8. Key risks
 
-| Risk | Source | Mitigation |
-| --- | --- | --- |
-| OCR quality/cost across 3 engines | ADR 0004 | Mobile-focused; catalog normalizes output; web degraded |
-| Catalog staleness + logo trademark | ADR 0004 | Sourcing + logo-usage policy in feat-catalog |
-| Client-side paywall bypass | ADR 0005/0011 | Accepted; server-gate Pro when backend lands |
-| Web feature degradation | ADR 0001 | Explicitly secondary; capability-flagged |
-| Config combinatorial explosion | ADR 0006 | Dependency graph + presets + resolver property tests |
+| Risk                               | Source        | Mitigation                                              |
+| ---------------------------------- | ------------- | ------------------------------------------------------- |
+| OCR quality/cost across 3 engines  | ADR 0004      | Mobile-focused; catalog normalizes output; web degraded |
+| Catalog staleness + logo trademark | ADR 0004      | Sourcing + logo-usage policy in feat-catalog            |
+| Client-side paywall bypass         | ADR 0005/0011 | Accepted; server-gate Pro when backend lands            |
+| Web feature degradation            | ADR 0001      | Explicitly secondary; capability-flagged                |
+| Config combinatorial explosion     | ADR 0006      | Dependency graph + presets + resolver property tests    |
 
 ## 9. Release
 

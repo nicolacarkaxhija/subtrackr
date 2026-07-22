@@ -31,7 +31,7 @@ self-build a source-available binary and remove the gate.
 ## Consequences
 
 - Source is public; `LICENSE` carries the PolyForm Noncommercial text + `Required
-  Notice`.
+Notice`.
 - The paywall is **honor-system for the technical minority**; the vast majority install
   signed store builds and are unaffected.
 - Not an OSI "open source" license — cannot be marketed as such.

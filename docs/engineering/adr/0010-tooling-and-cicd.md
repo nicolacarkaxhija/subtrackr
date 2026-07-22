@@ -18,6 +18,7 @@ and on **limited bandwidth**.
 ## Decision
 
 **Toolchain:**
+
 - **TypeScript** strict (`strict`, `noUncheckedIndexedAccess`).
 - **ESLint** flat config + **Prettier**; **dependency-cruiser** for module boundaries.
 - **Husky** + **lint-staged** + **commitlint** (Conventional Commits).
@@ -25,6 +26,7 @@ and on **limited bandwidth**.
 - **pnpm** workspaces monorepo.
 
 **CI/CD (GitHub Actions), activation deferred:**
+
 - Pipeline design is documented now; workflow files are added but **inert until
   pushed with credits available**.
 - **Checks run locally first**: a `pnpm verify` script (lint + typecheck + test) and

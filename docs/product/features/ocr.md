@@ -11,14 +11,17 @@ related: [feat-catalog, mod-config-registry]
 # On-device OCR
 
 ## Summary
+
 Extract subscription details from a receipt, screenshot, or PDF **on-device**. Output
 is normalized against the [catalog](./catalog.md). Nothing leaves the device.
 
 ## User stories
+
 - As a user, I photograph a receipt and the app pre-fills service, price, date.
 - As a privacy-focused user, I trust that the image and text never leave my phone.
 
 ## Behaviour / rules
+
 - **Adapters:** VisionKit (iOS), ML Kit (Android), WASM/`tesseract` (web, degraded).
 - Pipeline: image → text → **field extraction** (amount, currency, date, merchant) →
   **catalog fuzzy-match** → editable draft subscription.
@@ -28,6 +31,7 @@ is normalized against the [catalog](./catalog.md). Nothing leaves the device.
 - Image is processed in memory and **not persisted** unless the user attaches it.
 
 ## Feature-registry wiring
+
 - **Capability:** ios/android full; web degraded (flagged `ocr.web` off by default).
 - **Entitlement:** pro beyond free quota.
 - **Flag:** default on (mobile); kill-switch disables scanning entry point.
@@ -35,6 +39,7 @@ is normalized against the [catalog](./catalog.md). Nothing leaves the device.
 - **Depends on:** catalog (for normalization).
 
 ## Acceptance criteria
+
 - [ ] Amount/currency/date parsed correctly across a fixture set of locales.
 - [ ] Extracted merchant fuzzy-matches the right catalog service.
 - [ ] Low-confidence fields surfaced for confirmation.
@@ -42,5 +47,6 @@ is normalized against the [catalog](./catalog.md). Nothing leaves the device.
 - [ ] Web build gracefully hides/limits OCR when capability is off.
 
 ## Open questions / risks
+
 - Highest-risk v1 feature (three engines, device E2E). Mobile-first; web parity is a
   non-goal. Consider deferring web OCR entirely if quality is poor.

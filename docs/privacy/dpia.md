@@ -14,15 +14,15 @@ related: [privacy-policy, data-inventory, adr-0002]
 
 ## 1. Processing overview
 
-| Question | Answer (v1) |
-| --- | --- |
-| What is processed? | User-entered subscription data + optional on-device OCR |
-| Where? | On the user's device only |
-| By whom? | The user, on their device. The developer operates **no server** receiving data |
-| Legal basis | Not applicable to developer processing — no server-side processing occurs. Local processing is under the user's own control |
-| Special-category data? | No |
-| Automated decisions/profiling? | No |
-| International transfers? | None (no data leaves the device) |
+| Question                       | Answer (v1)                                                                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| What is processed?             | User-entered subscription data + optional on-device OCR                                                                     |
+| Where?                         | On the user's device only                                                                                                   |
+| By whom?                       | The user, on their device. The developer operates **no server** receiving data                                              |
+| Legal basis                    | Not applicable to developer processing — no server-side processing occurs. Local processing is under the user's own control |
+| Special-category data?         | No                                                                                                                          |
+| Automated decisions/profiling? | No                                                                                                                          |
+| International transfers?       | None (no data leaves the device)                                                                                            |
 
 ## 2. Necessity & proportionality
 
@@ -40,13 +40,13 @@ related: [privacy-policy, data-inventory, adr-0002]
 
 ## 4. Risks & mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-| --- | --- | --- | --- |
-| Device loss exposes local data | Medium | Medium | Rely on OS device encryption; optional app lock (biometric) roadmap; no cloud copy by default |
-| Accidental inclusion of a tracker SDK | Low | High | Policy: no analytics/ad SDKs; dependency review in CI; documented in [data-inventory](./data-inventory.md) |
-| Future sync leaks data | N/A v1 | High | Deferred; when added, **E2E encryption, user-held key**, zero-knowledge (ADR 0002) |
-| OCR image retention | Low | Medium | Images processed in memory; not persisted unless user attaches |
-| Export file mishandled by user | Low | Low | User-initiated; documented; no auto-upload |
+| Risk                                  | Likelihood | Impact | Mitigation                                                                                                 |
+| ------------------------------------- | ---------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| Device loss exposes local data        | Medium     | Medium | Rely on OS device encryption; optional app lock (biometric) roadmap; no cloud copy by default              |
+| Accidental inclusion of a tracker SDK | Low        | High   | Policy: no analytics/ad SDKs; dependency review in CI; documented in [data-inventory](./data-inventory.md) |
+| Future sync leaks data                | N/A v1     | High   | Deferred; when added, **E2E encryption, user-held key**, zero-knowledge (ADR 0002)                         |
+| OCR image retention                   | Low        | Medium | Images processed in memory; not persisted unless user attaches                                             |
+| Export file mishandled by user        | Low        | Low    | User-initiated; documented; no auto-upload                                                                 |
 
 ## 5. Store privacy disclosures
 

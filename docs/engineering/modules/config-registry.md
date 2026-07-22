@@ -19,27 +19,27 @@ graph, cache resolutions, and expose a stable injected API.
 available(X) = capability(X) ∧ entitlement(X) ∧ flag(X) ∧ preference(X)
 ```
 
-| Axis | Source | Mutable at runtime? |
-| --- | --- | --- |
-| capability | platform/device probe | no (per environment) |
-| entitlement | purchase state (free/pro) | on purchase |
-| flag | bundled defaults (+ remote seam later) | via app update / remote |
-| preference | user settings | yes (user) |
+| Axis        | Source                                 | Mutable at runtime?     |
+| ----------- | -------------------------------------- | ----------------------- |
+| capability  | platform/device probe                  | no (per environment)    |
+| entitlement | purchase state (free/pro)              | on purchase             |
+| flag        | bundled defaults (+ remote seam later) | via app update / remote |
+| preference  | user settings                          | yes (user)              |
 
 If **any** axis is false, the feature is unavailable. `preference` cannot enable a
-feature that `capability`/`entitlement`/`flag` disallow (it can only turn *off*).
+feature that `capability`/`entitlement`/`flag` disallow (it can only turn _off_).
 
 ## Feature definition (shape)
 
 ```ts
 interface FeatureDefinition {
-  key: FeatureKey;                 // e.g. "ocr", "ocr.web", "analytics.projections"
-  tier: 'free' | 'pro';            // entitlement requirement
-  platforms: Platform[];           // capability allow-list
-  defaultFlag: boolean;            // rollout / kill-switch default
-  defaultPreference: boolean;      // user toggle default
-  requires?: FeatureKey[];         // dependency edges
-  userConfigurable: boolean;       // does it show a toggle?
+  key: FeatureKey; // e.g. "ocr", "ocr.web", "analytics.projections"
+  tier: 'free' | 'pro'; // entitlement requirement
+  platforms: Platform[]; // capability allow-list
+  defaultFlag: boolean; // rollout / kill-switch default
+  defaultPreference: boolean; // user toggle default
+  requires?: FeatureKey[]; // dependency edges
+  userConfigurable: boolean; // does it show a toggle?
 }
 ```
 
@@ -58,10 +58,10 @@ interface FeatureDefinition {
 class FeatureRegistry {
   constructor(defs: FeatureDefinition[], ctx: ResolutionContext);
   isAvailable(key: FeatureKey): boolean;
-  explain(key: FeatureKey): AxisBreakdown;      // why on/off — for UI + debugging
+  explain(key: FeatureKey): AxisBreakdown; // why on/off — for UI + debugging
   setPreference(key: FeatureKey, on: boolean): void; // validates against graph
   applyPreset(preset: Preset): void;
-  snapshot(): ResolvedState;                    // for tests / persistence
+  snapshot(): ResolvedState; // for tests / persistence
 }
 ```
 

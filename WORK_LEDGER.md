@@ -8,17 +8,17 @@ and expressed as a range.
 Totals are recomputed at the bottom. One row per commit, newest at the top of its
 section.
 
-| Commit (type/scope) | Summary | Est. human effort |
-| --- | --- | --- |
-| `ci: deferred CI/CD workflows` | GitHub Actions CI + release workflows, gated off via `CI_ENABLED` until credits return | 1.5 – 2.5 h |
-| `feat: DateOnly + BillingCycle` | Two pure value objects with month-end/leap-year renewal math; unit tables + fast-check property tests | 4 – 6 h |
-| `chore: scaffold domain package` | Domain package with strict tsconfig, Vitest (100% gate), Stryker config | 0.5 – 1 h |
-| `chore: workspace tooling + gates` | pnpm workspace, ESLint flat + domain-purity rules, Prettier, commitlint, lint-staged, Changesets, dependency-cruiser, Husky hooks | 3 – 5 h |
-| `docs: process and privacy docs` | Testing strategy, CI/CD, coding standards, contributing; privacy policy, DPIA, data inventory | 5 – 8 h |
-| `docs: tech spec + module designs` | Tech-spec registry, architecture overview + ports, config-registry/data-model/repository-sync module docs | 5 – 8 h |
-| `docs: PRD + feature specs` | PRD registry, 8 feature specs with edge cases + acceptance criteria, template | 5 – 7 h |
-| `docs: registry + ADRs` | Docs registry + 11 ADRs capturing every design decision & alternatives | 4 – 6 h |
-| `chore: initialize repository` | git init, `.gitignore`, `.gitattributes`, PolyForm license, README | 1.5 – 2.5 h |
+| Commit (type/scope)                | Summary                                                                                                                           | Est. human effort |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `ci: deferred CI/CD workflows`     | GitHub Actions CI + release workflows, gated off via `CI_ENABLED` until credits return                                            | 1.5 – 2.5 h       |
+| `feat: DateOnly + BillingCycle`    | Two pure value objects with month-end/leap-year renewal math; unit tables + fast-check property tests                             | 4 – 6 h           |
+| `chore: scaffold domain package`   | Domain package with strict tsconfig, Vitest (100% gate), Stryker config                                                           | 0.5 – 1 h         |
+| `chore: workspace tooling + gates` | pnpm workspace, ESLint flat + domain-purity rules, Prettier, commitlint, lint-staged, Changesets, dependency-cruiser, Husky hooks | 3 – 5 h           |
+| `docs: process and privacy docs`   | Testing strategy, CI/CD, coding standards, contributing; privacy policy, DPIA, data inventory                                     | 5 – 8 h           |
+| `docs: tech spec + module designs` | Tech-spec registry, architecture overview + ports, config-registry/data-model/repository-sync module docs                         | 5 – 8 h           |
+| `docs: PRD + feature specs`        | PRD registry, 8 feature specs with edge cases + acceptance criteria, template                                                     | 5 – 7 h           |
+| `docs: registry + ADRs`            | Docs registry + 11 ADRs capturing every design decision & alternatives                                                            | 4 – 6 h           |
+| `chore: initialize repository`     | git init, `.gitignore`, `.gitattributes`, PolyForm license, README                                                                | 1.5 – 2.5 h       |
 
 > Note: the design-decision work behind the ADRs (the grilling/architecture session)
 > would realistically be several additional hours of senior/architect time; it is
@@ -26,11 +26,11 @@ section.
 
 ## Running total
 
-| Metric | Value |
-| --- | --- |
-| Commits logged | 9 |
-| Estimated human effort (low) | 29.5 h |
-| Estimated human effort (high) | 46 h |
+| Metric                        | Value  |
+| ----------------------------- | ------ |
+| Commits logged                | 9      |
+| Estimated human effort (low)  | 29.5 h |
+| Estimated human effort (high) | 46 h   |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit

@@ -11,14 +11,17 @@ related: [mod-config-registry]
 # Renewal & Grace-Period Reminders
 
 ## Summary
+
 Local notifications before a renewal charges, and countdowns for free-trial grace
 periods so users can cancel in time.
 
 ## User stories
+
 - As a user, I'm reminded N days before a subscription renews.
 - As a trial user, I see exactly how many days remain to cancel without being charged.
 
 ## Behaviour / rules
+
 - **Renewal reminders:** user-configurable lead times (e.g. 3 days / 1 day before);
   multiple lead times allowed.
 - **Grace-period countdowns:** for entries with a `trialEndsAt`, show days remaining and
@@ -28,6 +31,7 @@ periods so users can cancel in time.
 - Actionable notifications (mark paid / skip / snooze) where the platform allows.
 
 ## Feature-registry wiring
+
 - **Capability:** ios/android full; **web degraded** (web notifications unreliable,
   esp. iOS Safari — flagged, best-effort).
 - **Entitlement:** free.
@@ -36,10 +40,12 @@ periods so users can cancel in time.
 - **Depends on:** none.
 
 ## Acceptance criteria
+
 - [ ] Reminders scheduled at the correct local times for each lead time.
 - [ ] Grace-period countdown accurate across timezones/DST.
 - [ ] No reminders scheduled when capability/flag/preference is off.
 - [ ] Reschedule occurs after editing a subscription.
 
 ## Open questions / risks
+
 - Web/background scheduling limits; document degradation clearly in-app.
