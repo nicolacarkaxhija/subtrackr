@@ -16,6 +16,11 @@ describe('BillingCycle.custom', () => {
 
   it.each([0, -1, 1.5, Number.NaN])('rejects invalid interval %s', (n) => {
     expect(() => BillingCycle.custom(n)).toThrow(RangeError);
+    expect(() => BillingCycle.custom(n)).toThrow(/must be a positive integer/);
+  });
+
+  it('accepts an interval of exactly 1 day', () => {
+    expect(BillingCycle.custom(1).customIntervalDays).toBe(1);
   });
 });
 

@@ -9,21 +9,35 @@ describe('DateOnly.of', () => {
   });
 
   it.each([
-    [2026, 0, 1],
-    [2026, 13, 1],
-    [2026, 2, 29], // 2026 is not a leap year
-    [2026, 4, 31], // April has 30 days
-    [2026, 1, 0],
-  ])('rejects invalid date %i-%i-%i', (y, m, d) => {
+    [2026, 0, 1, /Invalid month: 0/],
+    [2026, 13, 1, /Invalid month: 13/],
+    [2026, 2, 29, /Invalid day 29 for 2026-2/], // 2026 is not a leap year
+    [2026, 4, 31, /Invalid day 31 for 2026-4/], // April has 30 days
+    [2026, 1, 0, /Invalid day 0 for 2026-1/],
+  ])('rejects invalid date %i-%i-%i', (y, m, d, message) => {
     expect(() => DateOnly.of(y, m, d)).toThrow(RangeError);
+    expect(() => DateOnly.of(y, m, d)).toThrow(message);
   });
 
   it('accepts Feb 29 in a leap year', () => {
     expect(DateOnly.of(2024, 2, 29).toISO()).toBe('2024-02-29');
   });
 
-  it('rejects non-integer components', () => {
-    expect(() => DateOnly.of(2026.5, 7, 21)).toThrow(RangeError);
+  it.each([
+    [2026.5, 7, 21],
+    [2026, 7.5, 21],
+    [2026, 7, 21.5],
+  ])('rejects non-integer components %s-%s-%s', (y, m, d) => {
+    expect(() => DateOnly.of(y, m, d)).toThrow(RangeError);
+    expect(() => DateOnly.of(y, m, d)).toThrow(/must be integers/);
+  });
+});
+
+describe('DateOnly.toISO', () => {
+  it('zero-pads year, month and day', () => {
+    // Years < 1000 exercise the year padding that 4-digit years never reach.
+    expect(DateOnly.of(999, 1, 2).toISO()).toBe('0999-01-02');
+    expect(DateOnly.of(7, 12, 25).toISO()).toBe('0007-12-25');
   });
 });
 
@@ -32,8 +46,14 @@ describe('DateOnly.fromISO', () => {
     expect(DateOnly.fromISO('2026-07-21').toISO()).toBe('2026-07-21');
   });
 
-  it.each(['2026/07/21', '2026-7-1', 'nope', '2026-13-01'])('rejects %s', (s) => {
+  it.each(['2026/07/21', '2026-7-1', 'nope', ''])('rejects malformed %s', (s) => {
     expect(() => DateOnly.fromISO(s)).toThrow(RangeError);
+    expect(() => DateOnly.fromISO(s)).toThrow(/Invalid ISO date/);
+  });
+
+  it('rejects a well-formed but invalid date', () => {
+    // Parses structurally, then fails validation in of().
+    expect(() => DateOnly.fromISO('2026-13-01')).toThrow(/Invalid month/);
   });
 });
 
@@ -49,14 +69,27 @@ describe('DateOnly.isLeapYear', () => {
 });
 
 describe('DateOnly.daysInMonth', () => {
+  // Every month is asserted explicitly: sampling only a few lets a wrong month-length
+  // clause slip through (caught by mutation testing).
   it.each([
     [2026, 1, 31],
     [2026, 2, 28],
-    [2024, 2, 29],
+    [2026, 3, 31],
     [2026, 4, 30],
+    [2026, 5, 31],
+    [2026, 6, 30],
+    [2026, 7, 31],
+    [2026, 8, 31],
+    [2026, 9, 30],
+    [2026, 10, 31],
+    [2026, 11, 30],
     [2026, 12, 31],
   ])('%i-%i → %i', (y, m, expected) => {
     expect(DateOnly.daysInMonth(y, m)).toBe(expected);
+  });
+
+  it('returns 29 for February in a leap year', () => {
+    expect(DateOnly.daysInMonth(2024, 2)).toBe(29);
   });
 });
 
