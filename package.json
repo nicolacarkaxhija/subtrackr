@@ -11,8 +11,9 @@
   },
   "scripts": {
     "dev": "pnpm --filter @subtrackr/mobile dev",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test -- --coverage",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test:coverage",
     "test": "pnpm -r --if-present test",
+    "test:coverage": "pnpm -r --if-present test:coverage",
     "test:watch": "pnpm --filter @subtrackr/domain test:watch",
     "test:mutation": "pnpm --filter @subtrackr/domain test:mutation",
     "typecheck": "pnpm -r --if-present typecheck",

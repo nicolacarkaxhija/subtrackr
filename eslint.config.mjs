@@ -11,7 +11,11 @@ export default tseslint.config(
       '**/coverage/**',
       '**/web-build/**',
       '**/.expo/**',
+      // Tooling configs are not part of any tsconfig project, so type-aware linting
+      // cannot parse them. Covers `*.config.*` plus dot-prefixed CJS configs
+      // (.lintstagedrc.cjs, .dependency-cruiser.cjs).
       '**/*.config.*',
+      '**/.*.cjs',
     ],
   },
   js.configs.recommended,

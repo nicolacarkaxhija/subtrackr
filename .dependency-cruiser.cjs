@@ -6,8 +6,7 @@ module.exports = {
   forbidden: [
     {
       name: 'domain-stays-pure',
-      comment:
-        'packages/domain must not import framework/platform/persistence code (ADR 0003).',
+      comment: 'packages/domain must not import framework/platform/persistence code (ADR 0003).',
       severity: 'error',
       from: { path: '^packages/domain' },
       to: {
@@ -31,13 +30,19 @@ module.exports = {
     },
     {
       name: 'no-orphans',
+      comment: 'Flag unreachable modules. Tests and tooling configs are legitimately orphaned.',
       severity: 'warn',
-      from: { orphan: true, pathNot: '\\.(test|spec)\\.ts$' },
+      from: {
+        orphan: true,
+        pathNot: '\\.(test|spec)\\.ts$|\\.config\\.(ts|js|mjs|cjs)$',
+      },
       to: {},
     },
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
+    // Generated output is not source; cruising it produces false orphan warnings.
+    exclude: { path: '(node_modules|coverage|reports|dist|build|\\.stryker-tmp)' },
     tsConfig: { fileName: 'tsconfig.base.json' },
     tsPreCompilationDeps: true,
   },

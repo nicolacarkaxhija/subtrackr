@@ -12,6 +12,7 @@
   },
   "scripts": {
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "test:mutation": "stryker run",
     "typecheck": "tsc --noEmit"
