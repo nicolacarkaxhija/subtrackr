@@ -10,6 +10,9 @@ section.
 
 | Commit (type/scope)                | Summary                                                                                                                           | Est. human effort |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `style: prettier formatting`       | Format all docs/config authored before the toolchain existed                                                                      | 0.25 – 0.5 h      |
+| `test: harden domain tests`        | Close mutation-revealed gaps (every month length, error messages, ISO padding); mutation score 95.98 → 98.85%                     | 1.5 – 2.5 h       |
+| `fix: tooling configuration`       | ESLint dot-CJS ignore, dep-cruiser excludes, coverage arg-forwarding fix; first install + full gate run                           | 1.5 – 3 h         |
 | `ci: deferred CI/CD workflows`     | GitHub Actions CI + release workflows, gated off via `CI_ENABLED` until credits return                                            | 1.5 – 2.5 h       |
 | `feat: DateOnly + BillingCycle`    | Two pure value objects with month-end/leap-year renewal math; unit tables + fast-check property tests                             | 4 – 6 h           |
 | `chore: scaffold domain package`   | Domain package with strict tsconfig, Vitest (100% gate), Stryker config                                                           | 0.5 – 1 h         |
@@ -26,11 +29,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value  |
-| ----------------------------- | ------ |
-| Commits logged                | 9      |
-| Estimated human effort (low)  | 29.5 h |
-| Estimated human effort (high) | 46 h   |
+| Metric                        | Value   |
+| ----------------------------- | ------- |
+| Commits logged                | 12      |
+| Estimated human effort (low)  | 32.75 h |
+| Estimated human effort (high) | 52 h    |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
