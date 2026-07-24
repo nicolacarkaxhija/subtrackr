@@ -1,25 +1,20 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { monthlyTotalsByCurrency, type Subscription } from '@subtrackr/domain';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import {
-  cycleLabel,
-  formatMoney,
-  sampleInput,
-  subscriptionService,
-  todayDateOnly,
-} from '@/lib/subscriptions';
+import { cycleLabel, formatMoney, subscriptionService, todayDateOnly } from '@/lib/subscriptions';
 
 const ACCENT = '#208AEF';
 const CONTENT_MAX_WIDTH = 560;
 
 export default function SubscriptionsScreen() {
+  const router = useRouter();
   const [subs, setSubs] = useState<Subscription[]>([]);
-  const [addIndex, setAddIndex] = useState(0);
   const today = useMemo(() => todayDateOnly(), []);
   const monthlyTotals = useMemo(() => monthlyTotalsByCurrency(subs), [subs]);
 
@@ -27,15 +22,12 @@ export default function SubscriptionsScreen() {
     setSubs(await subscriptionService.list());
   }, []);
 
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
-
-  const addSample = useCallback(async () => {
-    await subscriptionService.add(sampleInput(addIndex));
-    setAddIndex((index) => index + 1);
-    await refresh();
-  }, [addIndex, refresh]);
+  // Reload whenever the screen regains focus (e.g. returning from the add form).
+  useFocusEffect(
+    useCallback(() => {
+      void refresh();
+    }, [refresh]),
+  );
 
   const togglePause = useCallback(
     async (sub: Subscription) => {
@@ -90,7 +82,7 @@ export default function SubscriptionsScreen() {
           ) : null}
 
           <Pressable
-            onPress={() => void addSample()}
+            onPress={() => router.push('/add')}
             accessibilityRole="button"
             style={({ pressed }) => [
               styles.addButton,
