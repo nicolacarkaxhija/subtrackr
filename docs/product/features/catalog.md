@@ -1,11 +1,19 @@
 ---
 id: feat-catalog
 title: Smart Service Catalog
-status: draft
+status: living
 owner: nicola
 tier: free
 platforms: [ios, android, web]
 related: [feat-ocr, feat-manual-entry, mod-data-model]
+implemented:
+  - packages/catalog/src/data.ts (curated seed of ~30 services)
+  - packages/catalog/src/search.ts (ranked fuzzy search)
+  - apps/mobile/src/app/add.tsx (type-ahead quick-add)
+notes: >
+  v1 ships a bundled seed catalog with type-ahead autofill (name, price, cycle,
+  category). Logos, region-aware pricing, multi-plan templates, and a remote refresh are
+  deferred; logo bundling needs the trademark/usage policy noted below.
 ---
 
 # Smart Service Catalog

@@ -10,6 +10,8 @@ section.
 
 | Commit (type/scope)                                 | Summary                                                                                                                                                                                                | Est. human effort |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `feat: catalog quick-add in the form`               | Type-ahead suggestions that autofill name, price, currency, cycle, category from the catalog                                                                                                           | 1 – 1.5 h         |
+| `feat: bundled service catalog + fuzzy search`      | @subtrackr/catalog package: curated ~30-service seed + ranked fuzzy search (exact/prefix/substring/subsequence, popularity ties); TDD, 100% coverage, 95% mutation                                     | 3 – 4 h           |
 | `feat: free-trial grace-period countdowns`          | Trial-end field on the form + "Free trial: N days left" countdown on cards (in-app), using the tested domain trial math                                                                                | 1 – 1.5 h         |
 | `feat: shared plans (persist + UI)`                 | Codec serialization for sharedWith, add/edit form field, and per-card "your share" line                                                                                                                | 1 – 1.5 h         |
 | `feat: equal-split shared plans`                    | Money.equalShare (payer's share, absorbs remainder), Subscription.sharedWith + myMonthlyCost, spend uses the user share; TDD + property + mutation                                                     | 2 – 3 h           |
@@ -51,11 +53,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value   |
-| ----------------------------- | ------- |
-| Commits logged                | 36      |
-| Estimated human effort (low)  | 83 h    |
-| Estimated human effort (high) | 129.5 h |
+| Metric                        | Value |
+| ----------------------------- | ----- |
+| Commits logged                | 38    |
+| Estimated human effort (low)  | 87 h  |
+| Estimated human effort (high) | 135 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
