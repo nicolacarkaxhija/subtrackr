@@ -5,9 +5,11 @@ import {
 } from '@subtrackr/persistence';
 import {
   BillingCycle,
+  BundledRates,
   DateOnly,
   Money,
   exportSubscriptionsToCsv,
+  monthlyTotalInBase,
   type Clock,
   type IdGenerator,
   type KeyValueStore,
@@ -69,6 +71,23 @@ export const subscriptionService = new SubscriptionService({
   repository: createRepository(new SystemClock()),
   idGenerator: new CryptoIdGenerator(),
 });
+
+/** Currency the spend summary converts to. */
+export const BASE_CURRENCY = 'EUR';
+
+const rates = new BundledRates();
+
+/**
+ * Total monthly spend converted to the base currency, with the rate date for
+ * disclosure. Null when a subscription uses a currency the bundled rates cannot convert
+ * (the UI then falls back to the per-currency breakdown).
+ */
+export function baseMonthlyTotal(
+  subscriptions: readonly Subscription[],
+): { total: Money; asOf: string } | null {
+  const total = monthlyTotalInBase(subscriptions, rates, BASE_CURRENCY);
+  return total === null ? null : { total, asOf: rates.asOf };
+}
 
 /** Today's calendar date as a domain DateOnly. */
 export function todayDateOnly(): DateOnly {

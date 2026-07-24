@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import {
+  baseMonthlyTotal,
   cycleLabel,
   downloadSubscriptionsCsv,
   formatMoney,
@@ -24,6 +25,8 @@ export default function SubscriptionsScreen() {
   const [subs, setSubs] = useState<Subscription[]>([]);
   const today = useMemo(() => todayDateOnly(), []);
   const monthlyTotals = useMemo(() => monthlyTotalsByCurrency(subs), [subs]);
+  const baseTotal = useMemo(() => baseMonthlyTotal(subs), [subs]);
+  const multiCurrency = monthlyTotals.length > 1;
 
   const refresh = useCallback(async () => {
     setSubs(await subscriptionService.list());
@@ -91,12 +94,28 @@ export default function SubscriptionsScreen() {
               <ThemedText type="small" themeColor="textSecondary">
                 Monthly spend
               </ThemedText>
-              <ThemedText type="subtitle">
-                {monthlyTotals.map((total) => formatMoney(total)).join('  +  ')}
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                {monthlyTotals.map((total) => formatMoney(total.times(12))).join('  +  ')} per year
-              </ThemedText>
+              {multiCurrency && baseTotal !== null ? (
+                <>
+                  <ThemedText type="subtitle">≈ {formatMoney(baseTotal.total)}</ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {formatMoney(baseTotal.total.times(12))} per year ·{' '}
+                    {monthlyTotals.map((total) => formatMoney(total)).join(' + ')}
+                  </ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Converted at bundled rates, as of {baseTotal.asOf}
+                  </ThemedText>
+                </>
+              ) : (
+                <>
+                  <ThemedText type="subtitle">
+                    {monthlyTotals.map((total) => formatMoney(total)).join('  +  ')}
+                  </ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {monthlyTotals.map((total) => formatMoney(total.times(12))).join('  +  ')} per
+                    year
+                  </ThemedText>
+                </>
+              )}
             </ThemedView>
           ) : null}
 
