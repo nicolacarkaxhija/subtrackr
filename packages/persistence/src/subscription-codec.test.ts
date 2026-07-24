@@ -74,6 +74,20 @@ describe('subscription codec', () => {
     expect(back?.version).toBe(4);
   });
 
+  it('round-trips a uses-per-month count', () => {
+    const rec = record({
+      subscription: Subscription.create({
+        id: 'gym',
+        name: 'Gym',
+        amount: Money.of(3000, 'EUR'),
+        cycle: BillingCycle.monthly(),
+        anchorDate: DateOnly.fromISO('2026-01-15'),
+        usesPerMonth: 8,
+      }),
+    });
+    expect(roundTrip([rec])[0]?.subscription.usesPerMonth).toBe(8);
+  });
+
   it('round-trips a shared-plan count', () => {
     const rec = record({
       subscription: Subscription.create({

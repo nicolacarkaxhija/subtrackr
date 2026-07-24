@@ -125,6 +125,7 @@ export default function SubscriptionsScreen() {
             ) : (
               subs.map((sub) => {
                 const trialDaysLeft = sub.trialDaysRemaining(today);
+                const costPerUse = sub.costPerUse();
                 return (
                   <ThemedView key={sub.id} type="backgroundElement" style={styles.card}>
                     <View style={styles.cardHeader}>
@@ -157,6 +158,12 @@ export default function SubscriptionsScreen() {
                       <ThemedText type="small" style={styles.accentAction}>
                         Split {sub.sharedWith} ways · your share {formatMoney(sub.myMonthlyCost())}
                         /mo
+                      </ThemedText>
+                    ) : null}
+
+                    {costPerUse !== null ? (
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {formatMoney(costPerUse)} per use · {sub.usesPerMonth}×/mo
                       </ThemedText>
                     ) : null}
 

@@ -54,6 +54,7 @@ export default function AddSubscriptionScreen() {
   const [customDays, setCustomDays] = useState('30');
   const [category, setCategory] = useState('');
   const [sharedWith, setSharedWith] = useState('');
+  const [usesPerMonth, setUsesPerMonth] = useState('');
   const [firstCharge, setFirstCharge] = useState(todayDateOnly().toISO());
   const [trialEnds, setTrialEnds] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +92,7 @@ export default function AddSubscriptionScreen() {
       setCustomDays(String(existing.cycle.customIntervalDays ?? 30));
       setCategory(existing.category ?? '');
       setSharedWith(existing.sharedWith !== undefined ? String(existing.sharedWith) : '');
+      setUsesPerMonth(existing.usesPerMonth !== undefined ? String(existing.usesPerMonth) : '');
       setFirstCharge(existing.anchorDate.toISO());
       setTrialEnds(existing.trialEndsAt !== undefined ? existing.trialEndsAt.toISO() : '');
     })();
@@ -113,6 +115,7 @@ export default function AddSubscriptionScreen() {
         anchorDate: DateOnly.fromISO(firstCharge.trim()),
         ...(category.trim() !== '' ? { category: category.trim() } : {}),
         ...(sharedCount !== undefined ? { sharedWith: sharedCount } : {}),
+        ...(usesPerMonth.trim() !== '' ? { usesPerMonth: Number(usesPerMonth.trim()) } : {}),
         ...(trialEnds.trim() !== '' ? { trialEndsAt: DateOnly.fromISO(trialEnds.trim()) } : {}),
       };
       if (editId === null) {
@@ -243,6 +246,26 @@ export default function AddSubscriptionScreen() {
                 style={inputStyle}
                 accessibilityLabel="First charge date"
               />
+            </Field>
+
+            <Field label="Usage (optional)">
+              <View style={styles.customRow}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Used about
+                </ThemedText>
+                <TextInput
+                  value={usesPerMonth}
+                  onChangeText={setUsesPerMonth}
+                  keyboardType="number-pad"
+                  placeholder="0"
+                  placeholderTextColor={theme.textSecondary}
+                  style={[inputStyle, styles.daysInput]}
+                  accessibilityLabel="Uses per month"
+                />
+                <ThemedText type="small" themeColor="textSecondary">
+                  times per month
+                </ThemedText>
+              </View>
             </Field>
 
             <Field label="Free trial ends (optional)">

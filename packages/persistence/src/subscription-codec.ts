@@ -27,6 +27,7 @@ interface SerializedSubscription {
   notes?: string;
   catalogServiceId?: string;
   sharedWith?: number;
+  usesPerMonth?: number;
 }
 
 interface SerializedRecord {
@@ -76,6 +77,7 @@ function encodeRecord(record: SubscriptionRecord): SerializedRecord {
   if (s.notes !== undefined) subscription.notes = s.notes;
   if (s.catalogServiceId !== undefined) subscription.catalogServiceId = s.catalogServiceId;
   if (s.sharedWith !== undefined) subscription.sharedWith = s.sharedWith;
+  if (s.usesPerMonth !== undefined) subscription.usesPerMonth = s.usesPerMonth;
   return {
     subscription,
     createdAt: record.createdAt,
@@ -101,6 +103,7 @@ function decodeRecord(record: SerializedRecord): SubscriptionRecord {
     ...(s.notes !== undefined ? { notes: s.notes } : {}),
     ...(s.catalogServiceId !== undefined ? { catalogServiceId: s.catalogServiceId } : {}),
     ...(s.sharedWith !== undefined ? { sharedWith: s.sharedWith } : {}),
+    ...(s.usesPerMonth !== undefined ? { usesPerMonth: s.usesPerMonth } : {}),
   });
   return {
     subscription,
