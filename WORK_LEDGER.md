@@ -10,6 +10,8 @@ section.
 
 | Commit (type/scope)                                 | Summary                                                                                                                                                                                                | Est. human effort |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `feat: add-subscription form`                       | Modal form (name, price + currency, cycle incl. custom, first-charge date, category) wired to the service; parsing reuses the domain; inline validation                                                | 2 – 3 h           |
+| `feat: Money.parse`                                 | Decimal-string amount parser (two-decimal minor unit, rejects malformed input); TDD, 95% mutation                                                                                                      | 1 – 1.5 h         |
 | `feat: spend summary UI`                            | Monthly and yearly spend summary card on the Subscriptions screen                                                                                                                                      | 0.5 – 1 h         |
 | `feat: monthly-equivalent cost math + spend totals` | Money.mulDiv (rational scaling, round half away from zero), BillingCycle.monthlyEquivalentFactor (365.25-day year), Subscription.monthlyCost, per-currency spend totals; TDD + property + mutation     | 3 – 5 h           |
 | `feat: web persistence via localStorage`            | Wire the app to the persistent repository through a localStorage KeyValueStore; subscriptions survive reload                                                                                           | 1 – 2 h           |
@@ -44,11 +46,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value   |
-| ----------------------------- | ------- |
-| Commits logged                | 29      |
-| Estimated human effort (low)  | 73.5 h  |
-| Estimated human effort (high) | 115.5 h |
+| Metric                        | Value  |
+| ----------------------------- | ------ |
+| Commits logged                | 31     |
+| Estimated human effort (low)  | 76.5 h |
+| Estimated human effort (high) | 120 h  |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
