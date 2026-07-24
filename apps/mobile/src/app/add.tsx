@@ -1,8 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BillingCycle, DateOnly, Money, type CycleUnit } from '@subtrackr/domain';
+import { searchCatalog, type CatalogEntry } from '@subtrackr/catalog';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -57,6 +58,21 @@ export default function AddSubscriptionScreen() {
   const [trialEnds, setTrialEnds] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [picked, setPicked] = useState(false);
+
+  const suggestions = useMemo(
+    () => (editId === null && !picked && name.trim() !== '' ? searchCatalog(name, 5) : []),
+    [editId, picked, name],
+  );
+
+  const applyEntry = (entry: CatalogEntry) => {
+    setName(entry.name);
+    setAmount(minorToInputString(BigInt(entry.amountMinor)));
+    setCurrency(entry.currency);
+    setCycle(entry.cycle);
+    setCategory(entry.category);
+    setPicked(true);
+  };
 
   useEffect(() => {
     if (editId === null) {
@@ -128,12 +144,32 @@ export default function AddSubscriptionScreen() {
             <Field label="Name">
               <TextInput
                 value={name}
-                onChangeText={setName}
-                placeholder="Netflix"
+                onChangeText={(text) => {
+                  setName(text);
+                  setPicked(false);
+                }}
+                placeholder="Start typing, e.g. Netflix"
                 placeholderTextColor={theme.textSecondary}
                 style={inputStyle}
                 accessibilityLabel="Name"
               />
+              {suggestions.length > 0 ? (
+                <ThemedView type="backgroundElement" style={styles.suggestions}>
+                  {suggestions.map((entry) => (
+                    <Pressable
+                      key={entry.id}
+                      onPress={() => applyEntry(entry)}
+                      accessibilityRole="button"
+                      style={styles.suggestion}
+                    >
+                      <ThemedText type="small">{entry.name}</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {entry.category}
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </ThemedView>
+              ) : null}
             </Field>
 
             <Field label="Price">
@@ -313,6 +349,14 @@ const styles = StyleSheet.create({
   accent: { color: ACCENT },
   form: { gap: Spacing.four, paddingBottom: Spacing.five },
   field: { gap: Spacing.two },
+  suggestions: { borderRadius: 10, overflow: 'hidden' },
+  suggestion: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
   input: {
     borderRadius: 10,
     paddingHorizontal: Spacing.three,

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@subtrackr/application": "workspace:*",
+    "@subtrackr/catalog": "workspace:*",
     "@subtrackr/domain": "workspace:*",
     "@subtrackr/persistence": "workspace:*",
     "@expo/ui": "~57.0.7",
