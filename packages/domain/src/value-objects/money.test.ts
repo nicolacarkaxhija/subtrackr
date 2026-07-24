@@ -30,6 +30,39 @@ describe('Money.of', () => {
   });
 });
 
+describe('Money.parse', () => {
+  it.each<[string, bigint]>([
+    ['17.99', 1799n],
+    ['17', 1700n],
+    ['17.9', 1790n],
+    ['0.99', 99n],
+    ['0', 0n],
+    ['-5.00', -500n],
+    ['1000000.00', 100000000n],
+  ])('parses "%s" to %s minor units', (text, minor) => {
+    expect(Money.parse(text, 'EUR').amountMinor).toBe(minor);
+  });
+
+  it('trims surrounding whitespace', () => {
+    expect(Money.parse('  17.99  ', 'EUR').amountMinor).toBe(1799n);
+  });
+
+  it('keeps the given currency', () => {
+    expect(Money.parse('9.00', 'USD').currency).toBe('USD');
+  });
+
+  it.each(['', 'abc', '17.999', '1,99', '1.2.3', '17.', '.99', ' '])(
+    'rejects malformed input "%s"',
+    (text) => {
+      expect(() => Money.parse(text, 'EUR')).toThrow(/invalid amount/i);
+    },
+  );
+
+  it('rejects an invalid currency', () => {
+    expect(() => Money.parse('1.00', 'eur')).toThrow(/currency/i);
+  });
+});
+
 describe('Money.zero', () => {
   it('creates a zero amount in the given currency', () => {
     const z = Money.zero('EUR');

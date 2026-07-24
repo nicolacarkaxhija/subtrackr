@@ -25,6 +25,25 @@ export class Money {
     return Money.of(0, currency);
   }
 
+  /**
+   * Parse a decimal string (up to two fraction digits, optional leading `-`) into
+   * Money, assuming a two-decimal minor unit (EUR/USD/GBP…). e.g. "17.99" becomes 1799
+   * minor units. Throws on any other shape; commas and thousands separators are rejected.
+   */
+  static parse(text: string, currency: string): Money {
+    const trimmed = text.trim();
+    if (!/^-?\d+(?:\.\d{1,2})?$/.test(trimmed)) {
+      throw new RangeError(`Invalid amount: "${text}"`);
+    }
+    const negative = trimmed.startsWith('-');
+    const unsigned = negative ? trimmed.slice(1) : trimmed;
+    const dot = unsigned.indexOf('.');
+    const whole = dot === -1 ? unsigned : unsigned.slice(0, dot);
+    const fraction = dot === -1 ? '' : unsigned.slice(dot + 1);
+    const minor = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
+    return Money.of(negative ? -minor : minor, currency);
+  }
+
   private assertSameCurrency(other: Money): void {
     if (this.currency !== other.currency) {
       throw new TypeError(`Currency mismatch: ${this.currency} vs ${other.currency}`);
