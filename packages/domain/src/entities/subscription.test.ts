@@ -172,6 +172,38 @@ describe('Subscription shared plans', () => {
   });
 });
 
+describe('Subscription cost-per-use', () => {
+  it('is null when usage is not tracked', () => {
+    expect(make().costPerUse()).toBeNull();
+    expect(make().usesPerMonth).toBeUndefined();
+  });
+
+  it('divides the monthly cost by the number of uses', () => {
+    const s = make({ amount: Money.of(1000, 'EUR'), usesPerMonth: 5 });
+    expect(s.costPerUse()?.amountMinor).toBe(200n); // 10.00 / 5 = 2.00
+  });
+
+  it('rounds to the nearest cent', () => {
+    const s = make({ amount: Money.of(1000, 'EUR'), usesPerMonth: 3 });
+    expect(s.costPerUse()?.amountMinor).toBe(333n); // 10.00 / 3 = 3.33
+  });
+
+  it('uses the user share for shared plans', () => {
+    const s = make({ amount: Money.of(2000, 'EUR'), sharedWith: 2, usesPerMonth: 5 });
+    // my monthly cost 10.00 / 5 = 2.00
+    expect(s.costPerUse()?.amountMinor).toBe(200n);
+  });
+
+  it('accepts a single use per month', () => {
+    const s = make({ amount: Money.of(1000, 'EUR'), usesPerMonth: 1 });
+    expect(s.costPerUse()?.amountMinor).toBe(1000n);
+  });
+
+  it.each([0, -1, 1.5])('rejects a non-positive-integer usage count (%s)', (n) => {
+    expect(() => make({ usesPerMonth: n })).toThrow(/uses/i);
+  });
+});
+
 describe('Subscription.monthlyCost', () => {
   it('returns the amount unchanged for a monthly cycle', () => {
     expect(make().monthlyCost().amountMinor).toBe(1799n);

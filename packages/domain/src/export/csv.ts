@@ -19,6 +19,7 @@ const COLUMNS = [
   'url',
   'notes',
   'id',
+  'usesPerMonth',
 ] as const;
 
 /**
@@ -52,6 +53,7 @@ function toRow(subscription: Subscription): string[] {
     subscription.url ?? '',
     subscription.notes ?? '',
     subscription.id,
+    subscription.usesPerMonth === undefined ? '' : String(subscription.usesPerMonth),
   ];
 }
 

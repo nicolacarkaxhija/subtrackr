@@ -30,7 +30,7 @@ describe('exportSubscriptionsToCsv', () => {
   it('has a stable header row', () => {
     const [header] = lines(exportSubscriptionsToCsv([]));
     expect(header).toBe(
-      'name,category,amount,currency,amountMinor,cycle,customIntervalDays,firstCharge,status,sharedWith,trialEnds,paymentLabel,url,notes,id',
+      'name,category,amount,currency,amountMinor,cycle,customIntervalDays,firstCharge,status,sharedWith,trialEnds,paymentLabel,url,notes,id,usesPerMonth',
     );
   });
 
@@ -40,7 +40,7 @@ describe('exportSubscriptionsToCsv', () => {
 
   it('writes a row with the expected values', () => {
     const [, row] = lines(exportSubscriptionsToCsv([sub({ category: 'Streaming' })]));
-    expect(row).toBe('Netflix,Streaming,17.99,EUR,1799,monthly,,2026-01-15,active,,,,,,a');
+    expect(row).toBe('Netflix,Streaming,17.99,EUR,1799,monthly,,2026-01-15,active,,,,,,a,');
   });
 
   it('leaves optional fields blank when absent', () => {
@@ -75,6 +75,12 @@ describe('exportSubscriptionsToCsv', () => {
     const cells = lines(exportSubscriptionsToCsv([sub()]))[1]?.split(',');
     expect(cells?.[11]).toBe('');
     expect(cells?.[12]).toBe('');
+  });
+
+  it('records the uses-per-month for cost-per-use', () => {
+    const [, row] = lines(exportSubscriptionsToCsv([sub({ usesPerMonth: 8 })]));
+    const cells = row?.split(',');
+    expect(cells?.[15]).toBe('8');
   });
 
   it('records the custom interval for custom cycles', () => {

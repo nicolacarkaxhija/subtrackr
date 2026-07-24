@@ -20,6 +20,8 @@ export interface SubscriptionProps {
   readonly catalogServiceId?: string;
   /** People sharing this plan equally, including the user (>= 2). Omit if not shared. */
   readonly sharedWith?: number;
+  /** Times the user uses this per month, for cost-per-use (>= 1). Omit if not tracked. */
+  readonly usesPerMonth?: number;
 }
 
 /** Normalized, fully-validated internal shape (status resolved, strings trimmed). */
@@ -53,6 +55,12 @@ export class Subscription {
       (!Number.isInteger(props.sharedWith) || props.sharedWith < 2)
     ) {
       throw new RangeError('Shared plan must include at least 2 people');
+    }
+    if (
+      props.usesPerMonth !== undefined &&
+      (!Number.isInteger(props.usesPerMonth) || props.usesPerMonth < 1)
+    ) {
+      throw new RangeError('Uses per month must be a positive integer');
     }
 
     return new Subscription({
@@ -115,6 +123,10 @@ export class Subscription {
     return this.props.sharedWith;
   }
 
+  get usesPerMonth(): number | undefined {
+    return this.props.usesPerMonth;
+  }
+
   /** The next renewal date on or after `from`, derived from the anchor and cycle. */
   nextRenewalOnOrAfter(from: DateOnly): DateOnly {
     return this.props.cycle.nextRenewalOnOrAfter(this.props.anchorDate, from);
@@ -132,6 +144,12 @@ export class Subscription {
     return this.props.sharedWith === undefined
       ? monthly
       : monthly.equalShare(this.props.sharedWith);
+  }
+
+  /** Average cost per use (user monthly cost divided by uses), or null if untracked. */
+  costPerUse(): Money | null {
+    const uses = this.props.usesPerMonth;
+    return uses === undefined ? null : this.myMonthlyCost().mulDiv(1, uses);
   }
 
   /** Whether the free trial is still running on `on` (inclusive of the end date). */
