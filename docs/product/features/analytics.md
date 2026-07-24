@@ -1,11 +1,18 @@
 ---
 id: feat-analytics
 title: Multi-currency Spend Analytics
-status: draft
+status: living
 owner: nicola
 tier: free
 platforms: [ios, android, web]
 related: [adr-0008, mod-data-model]
+implemented:
+  - packages/domain/src/analytics/spend.ts (monthly totals per currency)
+  - packages/domain/src/value-objects/money.ts (mulDiv)
+  - packages/domain/src/value-objects/billing-cycle.ts (monthlyEquivalentFactor)
+notes: >
+  Per-currency totals ship; base-currency conversion (ADR 0008) is deferred until a
+  bundled Rates source lands.
 ---
 
 # Multi-currency Spend Analytics
