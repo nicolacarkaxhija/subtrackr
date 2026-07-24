@@ -1,12 +1,54 @@
 import { SubscriptionService, type AddSubscriptionInput } from '@subtrackr/application';
-import { InMemorySubscriptionRepository } from '@subtrackr/persistence';
-import { BillingCycle, DateOnly, Money, type Clock, type IdGenerator } from '@subtrackr/domain';
+import {
+  InMemorySubscriptionRepository,
+  PersistentSubscriptionRepository,
+} from '@subtrackr/persistence';
+import {
+  BillingCycle,
+  DateOnly,
+  Money,
+  type Clock,
+  type IdGenerator,
+  type KeyValueStore,
+  type SubscriptionRepository,
+} from '@subtrackr/domain';
 
-/** Real-time clock adapter (composition root only — never imported by domain). */
+/** Real-time clock adapter (composition root only, never imported by domain). */
 class SystemClock implements Clock {
   now(): number {
     return Date.now();
   }
+}
+
+/** localStorage-backed KeyValueStore for web; absent on native (guarded below). */
+class WebKeyValueStore implements KeyValueStore {
+  constructor(private readonly storage: Storage) {}
+
+  get(key: string): Promise<string | null> {
+    return Promise.resolve(this.storage.getItem(key));
+  }
+
+  set(key: string, value: string): Promise<void> {
+    this.storage.setItem(key, value);
+    return Promise.resolve();
+  }
+
+  remove(key: string): Promise<void> {
+    this.storage.removeItem(key);
+    return Promise.resolve();
+  }
+}
+
+/**
+ * Choose a repository for the current platform. Web persists through localStorage;
+ * native falls back to in-memory until a native key/value or SQLite adapter lands.
+ */
+function createRepository(clock: Clock): SubscriptionRepository {
+  const storage = (globalThis as { localStorage?: Storage }).localStorage;
+  if (storage !== undefined) {
+    return new PersistentSubscriptionRepository(new WebKeyValueStore(storage), clock);
+  }
+  return new InMemorySubscriptionRepository(clock);
 }
 
 /** UUID id generator; falls back to a random string where crypto.randomUUID is absent. */
@@ -20,12 +62,9 @@ class CryptoIdGenerator implements IdGenerator {
   }
 }
 
-/**
- * Composition root. v1 wires the in-memory repository (state resets on reload); a
- * persistent adapter drops in here without touching the UI or the service.
- */
+/** Composition root. Swapping the repository here never touches the UI or the service. */
 export const subscriptionService = new SubscriptionService({
-  repository: new InMemorySubscriptionRepository(new SystemClock()),
+  repository: createRepository(new SystemClock()),
   idGenerator: new CryptoIdGenerator(),
 });
 

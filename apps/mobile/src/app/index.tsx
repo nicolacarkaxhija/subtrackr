@@ -94,8 +94,7 @@ export default function SubscriptionsScreen() {
           >
             {subs.length === 0 ? (
               <ThemedText type="small" themeColor="textSecondary" style={styles.empty}>
-                Tap “Add subscription” to try it. This demo keeps data in memory, so the list resets
-                when you reload.
+                Add a subscription to start tracking. Everything stays on this device.
               </ThemedText>
             ) : (
               subs.map((sub) => (
