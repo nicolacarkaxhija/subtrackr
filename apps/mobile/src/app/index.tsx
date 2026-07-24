@@ -9,6 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import {
   cycleLabel,
+  downloadSubscriptionsCsv,
   formatMoney,
   subscriptionService,
   todayDateOnly,
@@ -65,7 +66,19 @@ export default function SubscriptionsScreen() {
             <ThemedText type="smallBold" style={styles.brand}>
               subtrackr
             </ThemedText>
-            <ThemedText type="subtitle">Subscriptions</ThemedText>
+            <View style={styles.titleRow}>
+              <ThemedText type="subtitle">Subscriptions</ThemedText>
+              {subs.length > 0 ? (
+                <Pressable
+                  onPress={() => downloadSubscriptionsCsv(subs)}
+                  accessibilityRole="button"
+                >
+                  <ThemedText type="small" style={styles.accentAction}>
+                    Export CSV
+                  </ThemedText>
+                </Pressable>
+              ) : null}
+            </View>
             <ThemedText type="small" themeColor="textSecondary">
               {subs.length === 0
                 ? 'Nothing tracked yet'
@@ -203,6 +216,7 @@ const styles = StyleSheet.create({
   column: { flex: 1, width: '100%', maxWidth: CONTENT_MAX_WIDTH },
   inner: { flex: 1, width: '100%', paddingHorizontal: Spacing.three },
   header: { paddingTop: Spacing.four, paddingBottom: Spacing.three, gap: Spacing.half },
+  titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
   brand: { color: ACCENT, letterSpacing: 1, textTransform: 'uppercase' },
   summary: {
     borderRadius: 14,

@@ -7,9 +7,11 @@ import {
   BillingCycle,
   DateOnly,
   Money,
+  exportSubscriptionsToCsv,
   type Clock,
   type IdGenerator,
   type KeyValueStore,
+  type Subscription,
   type SubscriptionRepository,
 } from '@subtrackr/domain';
 
@@ -85,6 +87,29 @@ export function formatMoney(amount: Money): string {
   } catch {
     return `${amount.currency} ${major.toFixed(2)}`;
   }
+}
+
+/**
+ * Export subscriptions to a CSV file. On web this triggers a browser download; on
+ * native it is a no-op for now (a share-sheet export can come with a native file API).
+ * Returns true if a download was started.
+ */
+export function downloadSubscriptionsCsv(subscriptions: readonly Subscription[]): boolean {
+  const doc = (globalThis as { document?: Document }).document;
+  if (doc === undefined) {
+    return false;
+  }
+  const csv = exportSubscriptionsToCsv(subscriptions);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = doc.createElement('a');
+  link.href = url;
+  link.download = 'subtrackr-subscriptions.csv';
+  doc.body.appendChild(link);
+  link.click();
+  doc.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  return true;
 }
 
 /** Human-readable free-trial countdown for a number of days remaining. */
