@@ -108,6 +108,12 @@ export class Subscription {
     return this.props.cycle.nextRenewalOnOrAfter(this.props.anchorDate, from);
   }
 
+  /** This subscription's cost normalized to a monthly equivalent (same currency). */
+  monthlyCost(): Money {
+    const { numerator, denominator } = this.props.cycle.monthlyEquivalentFactor();
+    return this.props.amount.mulDiv(numerator, denominator);
+  }
+
   /** Whether the free trial is still running on `on` (inclusive of the end date). */
   isTrialActive(on: DateOnly): boolean {
     const end = this.props.trialEndsAt;

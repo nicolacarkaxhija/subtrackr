@@ -9,6 +9,7 @@ export type { Clock } from './time/clock';
 export type { SubscriptionRecord, SubscriptionRepository } from './ports/subscription-repository';
 export type { IdGenerator } from './ports/id-generator';
 export type { KeyValueStore } from './ports/key-value-store';
+export { monthlyTotalsByCurrency } from './analytics/spend';
 export { FeatureRegistry } from './features/feature-registry';
 export type {
   AxisBreakdown,

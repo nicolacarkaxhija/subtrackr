@@ -66,6 +66,28 @@ export class BillingCycle {
   }
 
   /**
+   * The rational factor that converts one period's amount to a monthly equivalent,
+   * as `numerator / denominator`. Day-based cycles (weekly, custom) use a 365.25-day
+   * year (1461/4 days), so weekly equals custom(7). Consumed by `Money.mulDiv`.
+   */
+  monthlyEquivalentFactor(): { numerator: bigint; denominator: bigint } {
+    switch (this.unit) {
+      case 'monthly':
+        return { numerator: 1n, denominator: 1n };
+      case 'quarterly':
+        return { numerator: 1n, denominator: 3n };
+      case 'semiannual':
+        return { numerator: 1n, denominator: 6n };
+      case 'annual':
+        return { numerator: 1n, denominator: 12n };
+      case 'weekly':
+        return { numerator: 1461n, denominator: 48n * 7n };
+      case 'custom':
+        return { numerator: 1461n, denominator: 48n * BigInt(this.customDays) };
+    }
+  }
+
+  /**
    * The earliest renewal date on or after `from`, given the subscription's `anchor`
    * (its first/first-known charge date). If `from` is on or before `anchor`, the
    * anchor itself is the next renewal.

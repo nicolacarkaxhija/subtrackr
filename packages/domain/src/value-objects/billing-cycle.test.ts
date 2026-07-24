@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
 import { BillingCycle } from './billing-cycle';
 import { DateOnly } from './date-only';
+import { Money } from './money';
 
 const iso = (s: string): DateOnly => DateOnly.fromISO(s);
 
@@ -94,6 +95,39 @@ describe('BillingCycle.nextRenewalOnOrAfter', () => {
     expect(annual.nextRenewalOnOrAfter(iso('2024-02-29'), iso('2025-01-01')).toISO()).toBe(
       '2025-02-28', // 2025 not a leap year → clamp
     );
+  });
+});
+
+describe('BillingCycle.monthlyEquivalentFactor', () => {
+  const monthlyMinor = (cycle: BillingCycle, minor: number): bigint => {
+    const { numerator, denominator } = cycle.monthlyEquivalentFactor();
+    return Money.of(minor, 'EUR').mulDiv(numerator, denominator).amountMinor;
+  };
+
+  it('monthly is identity', () => {
+    expect(monthlyMinor(BillingCycle.monthly(), 1799)).toBe(1799n);
+  });
+
+  it('divides multi-month cycles', () => {
+    expect(monthlyMinor(BillingCycle.quarterly(), 3000)).toBe(1000n);
+    expect(monthlyMinor(BillingCycle.semiannual(), 6000)).toBe(1000n);
+    expect(monthlyMinor(BillingCycle.annual(), 12000)).toBe(1000n);
+  });
+
+  it('scales weekly up using a 365.25-day year (52.18 weeks)', () => {
+    // 1000 * 1461/336 = 4348.21 -> 4348
+    expect(monthlyMinor(BillingCycle.weekly(), 1000)).toBe(4348n);
+  });
+
+  it('treats weekly as custom(7)', () => {
+    expect(BillingCycle.weekly().monthlyEquivalentFactor()).toEqual(
+      BillingCycle.custom(7).monthlyEquivalentFactor(),
+    );
+  });
+
+  it('scales a custom day cycle', () => {
+    // 30-day cycle: 3000 * 1461/1440 = 3043.75 -> 3044
+    expect(monthlyMinor(BillingCycle.custom(30), 3000)).toBe(3044n);
   });
 });
 

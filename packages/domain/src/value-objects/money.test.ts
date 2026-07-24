@@ -88,6 +88,70 @@ describe('Money arithmetic', () => {
   });
 });
 
+describe('Money.mulDiv', () => {
+  it('multiplies then divides exactly when divisible', () => {
+    expect(eur(12000).mulDiv(1, 12).amountMinor).toBe(1000n); // annual to monthly
+    expect(eur(3000).mulDiv(1, 3).amountMinor).toBe(1000n); // quarterly to monthly
+  });
+
+  it('rounds to the nearest minor unit (half away from zero)', () => {
+    // 1000 * 13 / 3 = 4333.33 -> 4333
+    expect(eur(1000).mulDiv(13, 3).amountMinor).toBe(4333n);
+    // 10000 / 12 = 833.33 -> 833
+    expect(eur(10000).mulDiv(1, 12).amountMinor).toBe(833n);
+    // exactly .5 rounds away from zero: 5 / 2 = 2.5 -> 3
+    expect(eur(5).mulDiv(1, 2).amountMinor).toBe(3n);
+  });
+
+  it('rounds negatives away from zero too', () => {
+    expect(eur(-5).mulDiv(1, 2).amountMinor).toBe(-3n);
+    expect(eur(-1000).mulDiv(13, 3).amountMinor).toBe(-4333n);
+  });
+
+  it('accepts bigint arguments', () => {
+    expect(eur(3000).mulDiv(1n, 3n).amountMinor).toBe(1000n);
+  });
+
+  it('normalizes a negative denominator', () => {
+    expect(eur(1000).mulDiv(1, -3).amountMinor).toBe(-333n);
+    expect(eur(1000).mulDiv(1, -3).amountMinor).toBe(eur(1000).mulDiv(-1, 3).amountMinor);
+  });
+
+  it('preserves currency', () => {
+    expect(Money.of(1000, 'USD').mulDiv(1, 3).currency).toBe('USD');
+  });
+
+  it('rejects a zero denominator', () => {
+    expect(() => eur(100).mulDiv(1, 0)).toThrow(/denominator/i);
+  });
+
+  // Assert the specific guard message: without it, a removed guard falls through to
+  // BigInt(1.5) which also throws RangeError, masking the mutation.
+  it.each([1.5, Number.NaN])('rejects a non-integer numerator %s', (n) => {
+    expect(() => eur(100).mulDiv(n, 3)).toThrow(/numerator must be an integer/);
+  });
+
+  it.each([1.5, Number.NaN])('rejects a non-integer denominator %s', (n) => {
+    expect(() => eur(100).mulDiv(1, n)).toThrow(/denominator must be an integer/);
+  });
+
+  it('stays within half a minor unit of the exact value (property)', () => {
+    fc.assert(
+      fc.property(
+        arbMinor,
+        fc.integer({ min: 1, max: 100_000 }),
+        fc.integer({ min: 1, max: 100_000 }),
+        (minor, num, den) => {
+          const result = Money.of(minor, 'EUR').mulDiv(num, den);
+          const scaledError = result.amountMinor * BigInt(den) - minor * BigInt(num);
+          const magnitude = scaledError < 0n ? -scaledError : scaledError;
+          expect(2n * magnitude <= BigInt(den)).toBe(true);
+        },
+      ),
+    );
+  });
+});
+
 describe('Money comparisons', () => {
   it('compares and tests equality', () => {
     expect(eur(100).equals(eur(100))).toBe(true);

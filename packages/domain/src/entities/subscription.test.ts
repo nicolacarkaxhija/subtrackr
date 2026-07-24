@@ -140,6 +140,22 @@ describe('Subscription.nextRenewalOnOrAfter', () => {
   });
 });
 
+describe('Subscription.monthlyCost', () => {
+  it('returns the amount unchanged for a monthly cycle', () => {
+    expect(make().monthlyCost().amountMinor).toBe(1799n);
+  });
+
+  it('divides an annual cost across twelve months', () => {
+    const annual = make({ amount: Money.of(8990, 'EUR'), cycle: BillingCycle.annual() });
+    expect(annual.monthlyCost().amountMinor).toBe(749n); // 8990 / 12 = 749.16 -> 749
+  });
+
+  it('keeps the currency', () => {
+    const usd = make({ amount: Money.of(900, 'USD'), cycle: BillingCycle.monthly() });
+    expect(usd.monthlyCost().currency).toBe('USD');
+  });
+});
+
 describe('Subscription trial helpers', () => {
   // Built inside each test, never at collection time: a describe-body `make()` would
   // throw during collection under any create()-breaking mutant, masking it from Stryker.
