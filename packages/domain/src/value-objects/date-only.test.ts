@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
-import { DateOnly } from './date-only.js';
+import { DateOnly } from './date-only';
 
 describe('DateOnly.of', () => {
   it('accepts a valid date', () => {

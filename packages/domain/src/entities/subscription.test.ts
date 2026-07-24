@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
-import { Subscription } from './subscription.js';
-import type { SubscriptionProps, SubscriptionStatus } from './subscription.js';
-import { Money } from '../value-objects/money.js';
-import { BillingCycle } from '../value-objects/billing-cycle.js';
-import { DateOnly } from '../value-objects/date-only.js';
+import { Subscription } from './subscription';
+import type { SubscriptionProps, SubscriptionStatus } from './subscription';
+import { Money } from '../value-objects/money';
+import { BillingCycle } from '../value-objects/billing-cycle';
+import { DateOnly } from '../value-objects/date-only';
 
 const base = (over: Partial<SubscriptionProps> = {}): SubscriptionProps => ({
   id: 'sub-1',

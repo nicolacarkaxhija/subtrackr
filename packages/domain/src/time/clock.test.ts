@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ManualClock } from './clock.js';
+import { ManualClock } from './clock';
 
 describe('ManualClock', () => {
   it('starts at epoch 0 by default', () => {

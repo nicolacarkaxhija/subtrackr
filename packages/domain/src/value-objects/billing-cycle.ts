@@ -1,4 +1,4 @@
-import type { DateOnly } from './date-only.js';
+import type { DateOnly } from './date-only';
 
 export type CycleUnit = 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual' | 'custom';
 

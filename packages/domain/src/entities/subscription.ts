@@ -1,6 +1,6 @@
-import type { Money } from '../value-objects/money.js';
-import type { BillingCycle } from '../value-objects/billing-cycle.js';
-import type { DateOnly } from '../value-objects/date-only.js';
+import type { Money } from '../value-objects/money';
+import type { BillingCycle } from '../value-objects/billing-cycle';
+import type { DateOnly } from '../value-objects/date-only';
 
 export type SubscriptionStatus = 'active' | 'paused' | 'cancelled';
 

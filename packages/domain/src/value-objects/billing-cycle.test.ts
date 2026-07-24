@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
-import { BillingCycle } from './billing-cycle.js';
-import { DateOnly } from './date-only.js';
+import { BillingCycle } from './billing-cycle';
+import { DateOnly } from './date-only';
 
 const iso = (s: string): DateOnly => DateOnly.fromISO(s);
 

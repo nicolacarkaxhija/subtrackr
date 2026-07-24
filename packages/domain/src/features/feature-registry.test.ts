@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
-import { FeatureRegistry } from './feature-registry.js';
-import type { FeatureDefinition, ResolutionContext } from './feature-registry.js';
+import { FeatureRegistry } from './feature-registry';
+import type { FeatureDefinition, ResolutionContext } from './feature-registry';
 
 const def = (key: string, over: Partial<FeatureDefinition> = {}): FeatureDefinition => ({
   key,

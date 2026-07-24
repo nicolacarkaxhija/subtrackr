@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
-import { Money } from './money.js';
+import { Money } from './money';
 
 const eur = (minor: number | bigint): Money => Money.of(minor, 'EUR');
 

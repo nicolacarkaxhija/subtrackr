@@ -8,7 +8,7 @@ import {
   type SubscriptionRepository,
 } from '@subtrackr/domain';
 import { InMemorySubscriptionRepository } from '@subtrackr/persistence';
-import { SubscriptionService, type AddSubscriptionInput } from './subscription-service.js';
+import { SubscriptionService, type AddSubscriptionInput } from './subscription-service';
 
 class SequentialIdGenerator implements IdGenerator {
   private count = 0;

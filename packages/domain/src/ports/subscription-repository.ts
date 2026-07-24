@@ -1,4 +1,4 @@
-import type { Subscription } from '../entities/subscription.js';
+import type { Subscription } from '../entities/subscription';
 
 /**
  * A stored subscription plus the persistence/sync metadata the entity deliberately
