@@ -10,6 +10,7 @@ section.
 
 | Commit (type/scope)                                | Summary                                                                                                                                                                                             | Est. human effort |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `feat: rebrand app shell + fix web layout`         | Replace Expo template chrome with a clean Stack layout + Subtrackr branding; centered max-width column with explicit width chain; remove demo components; verified running on web                   | 2 – 3 h           |
 | `feat: Expo app + subscriptions screen`            | @subtrackr/mobile Expo SDK 57 app in the pnpm monorepo (Metro config), Subscriptions screen wired to the real service (in-memory repo + system clock + UUID gen); web bundle builds end-to-end      | 4 – 6 h           |
 | `refactor: extensionless relative imports`         | Drop `.js` from relative imports so Metro resolves TS sources (tsc/Vitest still green)                                                                                                              | 0.5 – 1 h         |
 | `feat: application package + SubscriptionService`  | @subtrackr/application; subscription lifecycle service (add/list/get/pause/resume/cancel/remove) over the ports; tested against the in-memory adapter + ManualClock; 100% coverage & mutation       | 4 – 6 h           |
@@ -39,11 +40,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value  |
-| ----------------------------- | ------ |
-| Commits logged                | 24     |
-| Estimated human effort (low)  | 63 h   |
-| Estimated human effort (high) | 98.5 h |
+| Metric                        | Value   |
+| ----------------------------- | ------- |
+| Commits logged                | 25      |
+| Estimated human effort (low)  | 65 h    |
+| Estimated human effort (high) | 101.5 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
