@@ -36,9 +36,9 @@ subscription-tracker/
 ├─ apps/
 │  └─ mobile/            # Expo app (iOS/Android/Web via RNW)
 ├─ packages/
-│  ├─ domain/            # pure-TS core: entities, value objects, use cases, ports
-│  ├─ persistence/       # Drizzle schema + Repository adapters (native/web)
-│  ├─ config/            # feature registry engine + feature definitions
+│  ├─ domain/            # pure-TS core: entities, value objects, ports, feature registry
+│  ├─ application/       # use-case services orchestrating the domain over its ports
+│  ├─ persistence/       # Repository adapters (in-memory; Drizzle SQLite native/web)
 │  ├─ catalog/           # bundled service catalog + fuzzy search
 │  └─ ui/                # shared RN components (optional split)
 ├─ docs/                 # this registry
