@@ -1,11 +1,18 @@
 ---
 id: feat-cost-per-use
 title: Cost-per-Use
-status: draft
+status: partial
 owner: nicola
 tier: free
 platforms: [ios, android, web]
 related: [feat-analytics]
+implemented:
+  - packages/domain/src/entities/subscription.ts (usesPerMonth, costPerUse)
+  - apps/mobile/src/app (usage field + per-card cost-per-use)
+notes: >
+  v1 uses a manual "uses per month" count and shows the average cost per use. The
+  quick "+1 use" running counter with per-period reset, and a low-value threshold hint,
+  are deferred.
 ---
 
 # Cost-per-Use
