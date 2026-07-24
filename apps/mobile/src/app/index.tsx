@@ -133,6 +133,14 @@ export default function SubscriptionsScreen() {
                   </View>
 
                   <View style={styles.actions}>
+                    <Pressable
+                      onPress={() => router.push({ pathname: '/add', params: { id: sub.id } })}
+                      accessibilityRole="button"
+                    >
+                      <ThemedText type="small" style={styles.accentAction}>
+                        Edit
+                      </ThemedText>
+                    </Pressable>
                     {sub.status !== 'cancelled' ? (
                       <Pressable onPress={() => void togglePause(sub)} accessibilityRole="button">
                         <ThemedText type="small" style={styles.accentAction}>

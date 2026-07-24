@@ -87,6 +87,14 @@ export function formatMoney(amount: Money): string {
   }
 }
 
+/** Render integer minor units as an editable decimal string, e.g. 1799 to "17.99". */
+export function minorToInputString(amountMinor: bigint): string {
+  const negative = amountMinor < 0n;
+  const abs = negative ? -amountMinor : amountMinor;
+  const fraction = (abs % 100n).toString().padStart(2, '0');
+  return `${negative ? '-' : ''}${abs / 100n}.${fraction}`;
+}
+
 const CYCLE_LABELS: Record<string, string> = {
   weekly: 'weekly',
   monthly: '/mo',

@@ -1,14 +1,14 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BillingCycle, DateOnly, Money, type CycleUnit } from '@subtrackr/domain';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { subscriptionService, todayDateOnly } from '@/lib/subscriptions';
+import { minorToInputString, subscriptionService, todayDateOnly } from '@/lib/subscriptions';
 
 const ACCENT = '#208AEF';
 const CONTENT_MAX_WIDTH = 560;
@@ -43,6 +43,8 @@ function buildCycle(unit: CycleUnit, customDays: string): BillingCycle {
 export default function AddSubscriptionScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const params = useLocalSearchParams<{ id?: string }>();
+  const editId = typeof params.id === 'string' && params.id.length > 0 ? params.id : null;
 
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
@@ -54,6 +56,26 @@ export default function AddSubscriptionScreen() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (editId === null) {
+      return;
+    }
+    void (async () => {
+      const existing = await subscriptionService.get(editId);
+      if (existing === null) {
+        setError('This subscription no longer exists.');
+        return;
+      }
+      setName(existing.name);
+      setAmount(minorToInputString(existing.amount.amountMinor));
+      setCurrency(existing.amount.currency);
+      setCycle(existing.cycle.unit);
+      setCustomDays(String(existing.cycle.customIntervalDays ?? 30));
+      setCategory(existing.category ?? '');
+      setFirstCharge(existing.anchorDate.toISO());
+    })();
+  }, [editId]);
+
   const inputStyle = [
     styles.input,
     { backgroundColor: theme.backgroundElement, color: theme.text },
@@ -63,18 +85,21 @@ export default function AddSubscriptionScreen() {
     setError(null);
     setSaving(true);
     try {
-      const parsedAmount = Money.parse(amount, currency);
-      const anchorDate = DateOnly.fromISO(firstCharge.trim());
-      await subscriptionService.add({
+      const input = {
         name,
-        amount: parsedAmount,
+        amount: Money.parse(amount, currency),
         cycle: buildCycle(cycle, customDays),
-        anchorDate,
+        anchorDate: DateOnly.fromISO(firstCharge.trim()),
         ...(category.trim() !== '' ? { category: category.trim() } : {}),
-      });
+      };
+      if (editId === null) {
+        await subscriptionService.add(input);
+      } else {
+        await subscriptionService.update(editId, input);
+      }
       router.back();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Could not add subscription');
+      setError(caught instanceof Error ? caught.message : 'Could not save subscription');
       setSaving(false);
     }
   };
@@ -84,7 +109,7 @@ export default function AddSubscriptionScreen() {
       <SafeAreaView style={styles.column} edges={['top', 'bottom']}>
         <View style={styles.inner}>
           <View style={styles.header}>
-            <ThemedText type="subtitle">Add subscription</ThemedText>
+            <ThemedText type="subtitle">{editId === null ? 'Add subscription' : 'Edit'}</ThemedText>
             <Pressable onPress={() => router.back()} accessibilityRole="button">
               <ThemedText type="small" style={styles.accent}>
                 Cancel
@@ -184,7 +209,7 @@ export default function AddSubscriptionScreen() {
               ]}
             >
               <ThemedText type="smallBold" style={styles.submitLabel}>
-                Add subscription
+                {editId === null ? 'Add subscription' : 'Save changes'}
               </ThemedText>
             </Pressable>
           </ScrollView>
