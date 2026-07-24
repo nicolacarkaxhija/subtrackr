@@ -10,6 +10,8 @@ section.
 
 | Commit (type/scope)                                | Summary                                                                                                                                                                                             | Est. human effort |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `feat: Expo app + subscriptions screen`            | @subtrackr/mobile Expo SDK 57 app in the pnpm monorepo (Metro config), Subscriptions screen wired to the real service (in-memory repo + system clock + UUID gen); web bundle builds end-to-end      | 4 – 6 h           |
+| `refactor: extensionless relative imports`         | Drop `.js` from relative imports so Metro resolves TS sources (tsc/Vitest still green)                                                                                                              | 0.5 – 1 h         |
 | `feat: application package + SubscriptionService`  | @subtrackr/application; subscription lifecycle service (add/list/get/pause/resume/cancel/remove) over the ports; tested against the in-memory adapter + ManualClock; 100% coverage & mutation       | 4 – 6 h           |
 | `feat: IdGenerator port`                           | Port so use cases mint ids without a platform RNG (pure/deterministic)                                                                                                                              | 0.5 – 1 h         |
 | `feat: persistence package + in-memory repository` | @subtrackr/persistence package, InMemorySubscriptionRepository (upsert, soft-delete tombstones, resurrect, copy-on-read), reusable cross-adapter contract test (14 cases)                           | 5 – 8 h           |
@@ -39,9 +41,9 @@ section.
 
 | Metric                        | Value  |
 | ----------------------------- | ------ |
-| Commits logged                | 22     |
-| Estimated human effort (low)  | 58.5 h |
-| Estimated human effort (high) | 91.5 h |
+| Commits logged                | 24     |
+| Estimated human effort (low)  | 63 h   |
+| Estimated human effort (high) | 98.5 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit
