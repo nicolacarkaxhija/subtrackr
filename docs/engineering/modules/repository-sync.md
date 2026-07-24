@@ -1,7 +1,10 @@
 ---
 id: mod-repository-sync
 title: Repository & Sync Ports
-status: draft
+status: living
+implemented:
+  - packages/domain/src/ports/subscription-repository.ts
+  - packages/persistence/src/in-memory-subscription-repository.ts (in-memory adapter + contract test)
 owner: nicola
 updated: 2026-07-21
 related: [adr-0002, adr-0003, mod-data-model]
