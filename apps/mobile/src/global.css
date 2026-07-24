@@ -7,3 +7,16 @@
   --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
   --font-serif: Georgia, 'Times New Roman', serif;
 }
+
+/*
+ * Constrain the web root to the viewport. Without an explicit width on #root the
+ * react-native-web tree sizes to its content, so a max-width column resolves to its
+ * cap and overflows narrow screens. overflow-x guards against any residual overflow.
+ */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}

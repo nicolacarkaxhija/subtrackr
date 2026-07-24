@@ -15,6 +15,7 @@ import {
 } from '@/lib/subscriptions';
 
 const ACCENT = '#208AEF';
+const CONTENT_MAX_WIDTH = 560;
 
 export default function SubscriptionsScreen() {
   const [subs, setSubs] = useState<Subscription[]>([]);
@@ -59,81 +60,92 @@ export default function SubscriptionsScreen() {
 
   return (
     <ThemedView style={styles.root}>
-      <SafeAreaView style={styles.safe} edges={['top']}>
-        <View style={styles.header}>
-          <ThemedText type="subtitle">Subscriptions</ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
-            {subs.length === 0
-              ? 'Nothing tracked yet'
-              : `${subs.length} tracked · ${activeCount} active`}
-          </ThemedText>
-        </View>
-
-        <Pressable
-          onPress={() => void addSample()}
-          accessibilityRole="button"
-          style={({ pressed }) => [
-            styles.addButton,
-            { backgroundColor: ACCENT, opacity: pressed ? 0.85 : 1 },
-          ]}
-        >
-          <ThemedText type="smallBold" style={styles.addButtonLabel}>
-            + Add subscription
-          </ThemedText>
-        </Pressable>
-
-        <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-          {subs.length === 0 ? (
-            <ThemedText type="small" themeColor="textSecondary" style={styles.empty}>
-              Tap “Add subscription” to try it. This demo uses in-memory storage, so the list resets
-              when you reload.
+      <View style={styles.column}>
+        <SafeAreaView style={styles.inner} edges={['top', 'bottom']}>
+          <View style={styles.header}>
+            <ThemedText type="smallBold" style={styles.brand}>
+              subtrackr
             </ThemedText>
-          ) : (
-            subs.map((sub) => (
-              <ThemedView key={sub.id} type="backgroundElement" style={styles.card}>
-                <View style={styles.cardHeader}>
-                  <View style={styles.titleBlock}>
-                    <ThemedText type="smallBold">{sub.name}</ThemedText>
-                    {sub.category ? (
-                      <ThemedText type="small" themeColor="textSecondary">
-                        {sub.category}
+            <ThemedText type="subtitle">Subscriptions</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              {subs.length === 0
+                ? 'Nothing tracked yet'
+                : `${subs.length} tracked · ${activeCount} active`}
+            </ThemedText>
+          </View>
+
+          <Pressable
+            onPress={() => void addSample()}
+            accessibilityRole="button"
+            style={({ pressed }) => [
+              styles.addButton,
+              { backgroundColor: ACCENT, opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <ThemedText type="smallBold" style={styles.addButtonLabel}>
+              + Add subscription
+            </ThemedText>
+          </Pressable>
+
+          <ScrollView
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+            style={styles.scroll}
+          >
+            {subs.length === 0 ? (
+              <ThemedText type="small" themeColor="textSecondary" style={styles.empty}>
+                Tap “Add subscription” to try it. This demo keeps data in memory, so the list resets
+                when you reload.
+              </ThemedText>
+            ) : (
+              subs.map((sub) => (
+                <ThemedView key={sub.id} type="backgroundElement" style={styles.card}>
+                  <View style={styles.cardHeader}>
+                    <View style={styles.titleBlock}>
+                      <ThemedText type="smallBold" numberOfLines={1}>
+                        {sub.name}
                       </ThemedText>
-                    ) : null}
+                      {sub.category ? (
+                        <ThemedText type="small" themeColor="textSecondary">
+                          {sub.category}
+                        </ThemedText>
+                      ) : null}
+                    </View>
+                    <View style={styles.priceBlock}>
+                      <ThemedText type="smallBold">{formatMoney(sub.amount)}</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {cycleLabel(sub.cycle)}
+                      </ThemedText>
+                    </View>
                   </View>
-                  <View style={styles.priceBlock}>
-                    <ThemedText type="smallBold">{formatMoney(sub.amount)}</ThemedText>
+
+                  <View style={styles.metaRow}>
                     <ThemedText type="small" themeColor="textSecondary">
-                      {cycleLabel(sub.cycle)}
+                      Renews {sub.nextRenewalOnOrAfter(today).toISO()}
                     </ThemedText>
+                    <StatusBadge status={sub.status} />
                   </View>
-                </View>
 
-                <View style={styles.metaRow}>
-                  <ThemedText type="small" themeColor="textSecondary">
-                    Renews {sub.nextRenewalOnOrAfter(today).toISO()}
-                  </ThemedText>
-                  <StatusBadge status={sub.status} />
-                </View>
-
-                <View style={styles.actions}>
-                  {sub.status !== 'cancelled' ? (
-                    <Pressable onPress={() => void togglePause(sub)} accessibilityRole="button">
-                      <ThemedText type="small" style={styles.accentAction}>
-                        {sub.status === 'active' ? 'Pause' : 'Resume'}
+                  <View style={styles.actions}>
+                    {sub.status !== 'cancelled' ? (
+                      <Pressable onPress={() => void togglePause(sub)} accessibilityRole="button">
+                        <ThemedText type="small" style={styles.accentAction}>
+                          {sub.status === 'active' ? 'Pause' : 'Resume'}
+                        </ThemedText>
+                      </Pressable>
+                    ) : null}
+                    <Pressable onPress={() => void remove(sub.id)} accessibilityRole="button">
+                      <ThemedText type="small" themeColor="textSecondary">
+                        Remove
                       </ThemedText>
                     </Pressable>
-                  ) : null}
-                  <Pressable onPress={() => void remove(sub.id)} accessibilityRole="button">
-                    <ThemedText type="small" themeColor="textSecondary">
-                      Remove
-                    </ThemedText>
-                  </Pressable>
-                </View>
-              </ThemedView>
-            ))
-          )}
-        </ScrollView>
-      </SafeAreaView>
+                  </View>
+                </ThemedView>
+              ))
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      </View>
     </ThemedView>
   );
 }
@@ -148,9 +160,14 @@ function StatusBadge({ status }: { status: Subscription['status'] }) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1 },
-  safe: { flex: 1, paddingHorizontal: Spacing.three },
-  header: { paddingTop: Spacing.three, paddingBottom: Spacing.two, gap: Spacing.half },
+  // Explicit width:'100%' at each level so Yoga can resolve the percentages (a bare
+  // flex:1 leaves the cross-axis width indefinite, which made the column snap to its
+  // maxWidth and overflow narrow viewports). The parent centers; the column caps width.
+  root: { flex: 1, width: '100%', alignItems: 'center' },
+  column: { flex: 1, width: '100%', maxWidth: CONTENT_MAX_WIDTH },
+  inner: { flex: 1, width: '100%', paddingHorizontal: Spacing.three },
+  header: { paddingTop: Spacing.four, paddingBottom: Spacing.three, gap: Spacing.half },
+  brand: { color: ACCENT, letterSpacing: 1, textTransform: 'uppercase' },
   addButton: {
     borderRadius: 12,
     paddingVertical: Spacing.three,
@@ -158,6 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.three,
   },
   addButtonLabel: { color: '#ffffff' },
+  scroll: { flex: 1 },
   list: { gap: Spacing.two, paddingBottom: Spacing.five },
   empty: {
     textAlign: 'center',
@@ -168,7 +186,7 @@ const styles = StyleSheet.create({
   card: { borderRadius: 14, padding: Spacing.three, gap: Spacing.two },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   titleBlock: { gap: 2, flexShrink: 1, paddingRight: Spacing.two },
-  priceBlock: { alignItems: 'flex-end' },
+  priceBlock: { alignItems: 'flex-end', flexShrink: 0 },
   metaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   actions: { flexDirection: 'row', gap: Spacing.four, paddingTop: Spacing.one },
   accentAction: { color: ACCENT },
