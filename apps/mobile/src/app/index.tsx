@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { Subscription } from '@subtrackr/domain';
+import { monthlyTotalsByCurrency, type Subscription } from '@subtrackr/domain';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -21,6 +21,7 @@ export default function SubscriptionsScreen() {
   const [subs, setSubs] = useState<Subscription[]>([]);
   const [addIndex, setAddIndex] = useState(0);
   const today = useMemo(() => todayDateOnly(), []);
+  const monthlyTotals = useMemo(() => monthlyTotalsByCurrency(subs), [subs]);
 
   const refresh = useCallback(async () => {
     setSubs(await subscriptionService.list());
@@ -73,6 +74,20 @@ export default function SubscriptionsScreen() {
                 : `${subs.length} tracked · ${activeCount} active`}
             </ThemedText>
           </View>
+
+          {monthlyTotals.length > 0 ? (
+            <ThemedView type="backgroundElement" style={styles.summary}>
+              <ThemedText type="small" themeColor="textSecondary">
+                Monthly spend
+              </ThemedText>
+              <ThemedText type="subtitle">
+                {monthlyTotals.map((total) => formatMoney(total)).join('  +  ')}
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {monthlyTotals.map((total) => formatMoney(total.times(12))).join('  +  ')} per year
+              </ThemedText>
+            </ThemedView>
+          ) : null}
 
           <Pressable
             onPress={() => void addSample()}
@@ -167,6 +182,12 @@ const styles = StyleSheet.create({
   inner: { flex: 1, width: '100%', paddingHorizontal: Spacing.three },
   header: { paddingTop: Spacing.four, paddingBottom: Spacing.three, gap: Spacing.half },
   brand: { color: ACCENT, letterSpacing: 1, textTransform: 'uppercase' },
+  summary: {
+    borderRadius: 14,
+    padding: Spacing.three,
+    gap: Spacing.half,
+    marginBottom: Spacing.three,
+  },
   addButton: {
     borderRadius: 12,
     paddingVertical: Spacing.three,
