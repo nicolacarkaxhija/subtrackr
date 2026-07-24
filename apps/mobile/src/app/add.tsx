@@ -52,6 +52,7 @@ export default function AddSubscriptionScreen() {
   const [cycle, setCycle] = useState<CycleUnit>('monthly');
   const [customDays, setCustomDays] = useState('30');
   const [category, setCategory] = useState('');
+  const [sharedWith, setSharedWith] = useState('');
   const [firstCharge, setFirstCharge] = useState(todayDateOnly().toISO());
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -72,6 +73,7 @@ export default function AddSubscriptionScreen() {
       setCycle(existing.cycle.unit);
       setCustomDays(String(existing.cycle.customIntervalDays ?? 30));
       setCategory(existing.category ?? '');
+      setSharedWith(existing.sharedWith !== undefined ? String(existing.sharedWith) : '');
       setFirstCharge(existing.anchorDate.toISO());
     })();
   }, [editId]);
@@ -85,12 +87,14 @@ export default function AddSubscriptionScreen() {
     setError(null);
     setSaving(true);
     try {
+      const sharedCount = sharedWith.trim() === '' ? undefined : Number(sharedWith.trim());
       const input = {
         name,
         amount: Money.parse(amount, currency),
         cycle: buildCycle(cycle, customDays),
         anchorDate: DateOnly.fromISO(firstCharge.trim()),
         ...(category.trim() !== '' ? { category: category.trim() } : {}),
+        ...(sharedCount !== undefined ? { sharedWith: sharedCount } : {}),
       };
       if (editId === null) {
         await subscriptionService.add(input);
@@ -168,6 +172,26 @@ export default function AddSubscriptionScreen() {
                   </ThemedText>
                 </View>
               ) : null}
+            </Field>
+
+            <Field label="Shared plan (optional)">
+              <View style={styles.customRow}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Split between
+                </ThemedText>
+                <TextInput
+                  value={sharedWith}
+                  onChangeText={setSharedWith}
+                  keyboardType="number-pad"
+                  placeholder="1"
+                  placeholderTextColor={theme.textSecondary}
+                  style={[inputStyle, styles.daysInput]}
+                  accessibilityLabel="Number of people sharing"
+                />
+                <ThemedText type="small" themeColor="textSecondary">
+                  people (incl. you)
+                </ThemedText>
+              </View>
             </Field>
 
             <Field label="First charge">

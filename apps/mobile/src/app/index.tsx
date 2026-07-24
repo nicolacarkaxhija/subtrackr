@@ -132,6 +132,12 @@ export default function SubscriptionsScreen() {
                     <StatusBadge status={sub.status} />
                   </View>
 
+                  {sub.sharedWith !== undefined ? (
+                    <ThemedText type="small" style={styles.accentAction}>
+                      Split {sub.sharedWith} ways · your share {formatMoney(sub.myMonthlyCost())}/mo
+                    </ThemedText>
+                  ) : null}
+
                   <View style={styles.actions}>
                     <Pressable
                       onPress={() => router.push({ pathname: '/add', params: { id: sub.id } })}

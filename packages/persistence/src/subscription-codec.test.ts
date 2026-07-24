@@ -74,6 +74,20 @@ describe('subscription codec', () => {
     expect(back?.version).toBe(4);
   });
 
+  it('round-trips a shared-plan count', () => {
+    const rec = record({
+      subscription: Subscription.create({
+        id: 'shared',
+        name: 'Netflix',
+        amount: Money.of(1799, 'EUR'),
+        cycle: BillingCycle.monthly(),
+        anchorDate: DateOnly.fromISO('2026-01-15'),
+        sharedWith: 4,
+      }),
+    });
+    expect(roundTrip([rec])[0]?.subscription.sharedWith).toBe(4);
+  });
+
   it('round-trips a minimal record leaving optionals undefined', () => {
     const [back] = roundTrip([record()]);
     expect(back?.subscription.category).toBeUndefined();
