@@ -30,6 +30,28 @@ describe('Money.of', () => {
   });
 });
 
+describe('Money.toDecimalString', () => {
+  it.each<[number, string]>([
+    [1799, '17.99'],
+    [100, '1.00'],
+    [5, '0.05'],
+    [0, '0.00'],
+    [-500, '-5.00'],
+    [1000000000, '10000000.00'],
+  ])('renders %s minor units as "%s"', (minor, text) => {
+    expect(eur(minor).toDecimalString()).toBe(text);
+  });
+
+  it('round-trips through parse', () => {
+    fc.assert(
+      fc.property(arbMinor, (minor) => {
+        const money = Money.of(minor, 'EUR');
+        expect(Money.parse(money.toDecimalString(), 'EUR').equals(money)).toBe(true);
+      }),
+    );
+  });
+});
+
 describe('Money.parse', () => {
   it.each<[string, bigint]>([
     ['17.99', 1799n],

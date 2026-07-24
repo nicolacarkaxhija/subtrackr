@@ -10,6 +10,7 @@ export type { SubscriptionRecord, SubscriptionRepository } from './ports/subscri
 export type { IdGenerator } from './ports/id-generator';
 export type { KeyValueStore } from './ports/key-value-store';
 export { monthlyTotalsByCurrency } from './analytics/spend';
+export { exportSubscriptionsToCsv } from './export/csv';
 export { FeatureRegistry } from './features/feature-registry';
 export type {
   AxisBreakdown,

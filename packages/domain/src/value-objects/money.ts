@@ -25,6 +25,14 @@ export class Money {
     return Money.of(0, currency);
   }
 
+  /** Render as a plain decimal string with two fraction digits, e.g. "17.99". Inverse of {@link Money.parse}. */
+  toDecimalString(): string {
+    const negative = this.amountMinor < 0n;
+    const abs = negative ? -this.amountMinor : this.amountMinor;
+    const fraction = (abs % 100n).toString().padStart(2, '0');
+    return `${negative ? '-' : ''}${abs / 100n}.${fraction}`;
+  }
+
   /**
    * Parse a decimal string (up to two fraction digits, optional leading `-`) into
    * Money, assuming a two-decimal minor unit (EUR/USD/GBP…). e.g. "17.99" becomes 1799
