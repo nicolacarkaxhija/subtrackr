@@ -1,0 +1,27 @@
+{
+  "name": "@subtrackr/persistence",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Repository adapters implementing the domain persistence ports.",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@subtrackr/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.2",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.2"
+  }
+}
