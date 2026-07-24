@@ -10,6 +10,7 @@ export type {
   SubscriptionRecord,
   SubscriptionRepository,
 } from './ports/subscription-repository.js';
+export type { IdGenerator } from './ports/id-generator.js';
 export { FeatureRegistry } from './features/feature-registry.js';
 export type {
   AxisBreakdown,
