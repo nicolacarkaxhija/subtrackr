@@ -5,6 +5,8 @@ status: living
 implemented:
   - packages/domain/src/ports/subscription-repository.ts
   - packages/persistence/src/in-memory-subscription-repository.ts (in-memory adapter + contract test)
+  - packages/persistence/src/persistent-subscription-repository.ts (KeyValueStore-backed, same contract)
+  - packages/persistence/src/subscription-codec.ts (JSON codec, schema-versioned)
 owner: nicola
 updated: 2026-07-21
 related: [adr-0002, adr-0003, mod-data-model]
