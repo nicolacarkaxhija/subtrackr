@@ -43,6 +43,22 @@ where correctness matters most (money + dates), pragmatic elsewhere.
 - No `Date.now()`/`Math.random()` in the domain — inject `Clock` and an id generator.
 - Tests use fixed clocks and seeded generators; property tests log the failing seed.
 
+## Mutation-testing pitfalls (hard-won)
+
+- **Never construct domain objects at `describe`-body / collection time** in a
+  mutation-tested suite. If a mutant makes a constructor/validator throw
+  unconditionally, a collection-time construction throws during test _collection_ — so
+  **zero tests run**, Stryker sees no failing test, and the mutant is wrongly reported
+  as **survived**. Build fixtures inside `it`/`beforeEach` (or via a factory function)
+  so a broken guard produces a real test **failure**. This masked six validation
+  mutants in `Subscription` at 100% line coverage.
+- **Assert error _messages_, not just error _types_.** A broken guard often falls
+  through to a different code path that throws the _same_ error class (e.g. a `BigInt`
+  division-by-zero also throwing `RangeError`), so `toThrow(RangeError)` passes either
+  way. Assert a substring unique to the intended guard.
+- Run one Stryker instance at a time; concurrent runs corrupt the `.stryker-tmp`
+  sandbox and produce meaningless results.
+
 ## Local-first execution (bandwidth/credit constraint, ADR 0010)
 
 Until CI credits return, these gates run **locally**:
