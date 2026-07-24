@@ -45,6 +45,31 @@ importers:
         specifier: ^8.8.0
         version: 8.65.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3)
 
+  packages/application:
+    dependencies:
+      '@subtrackr/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      '@stryker-mutator/core':
+        specifier: ^8.6.0
+        version: 8.7.1
+      '@stryker-mutator/vitest-runner':
+        specifier: ^8.6.0
+        version: 8.7.1(@stryker-mutator/core@8.7.1)(vitest@2.1.9(@types/node@22.20.1))
+      '@subtrackr/persistence':
+        specifier: workspace:*
+        version: link:../persistence
+      '@vitest/coverage-v8':
+        specifier: ^2.1.2
+        version: 2.1.9(vitest@2.1.9(@types/node@22.20.1))
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.2
+        version: 2.1.9(@types/node@22.20.1)
+
   packages/domain:
     devDependencies:
       '@stryker-mutator/core':
