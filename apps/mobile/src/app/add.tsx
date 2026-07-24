@@ -54,6 +54,7 @@ export default function AddSubscriptionScreen() {
   const [category, setCategory] = useState('');
   const [sharedWith, setSharedWith] = useState('');
   const [firstCharge, setFirstCharge] = useState(todayDateOnly().toISO());
+  const [trialEnds, setTrialEnds] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -75,6 +76,7 @@ export default function AddSubscriptionScreen() {
       setCategory(existing.category ?? '');
       setSharedWith(existing.sharedWith !== undefined ? String(existing.sharedWith) : '');
       setFirstCharge(existing.anchorDate.toISO());
+      setTrialEnds(existing.trialEndsAt !== undefined ? existing.trialEndsAt.toISO() : '');
     })();
   }, [editId]);
 
@@ -95,6 +97,7 @@ export default function AddSubscriptionScreen() {
         anchorDate: DateOnly.fromISO(firstCharge.trim()),
         ...(category.trim() !== '' ? { category: category.trim() } : {}),
         ...(sharedCount !== undefined ? { sharedWith: sharedCount } : {}),
+        ...(trialEnds.trim() !== '' ? { trialEndsAt: DateOnly.fromISO(trialEnds.trim()) } : {}),
       };
       if (editId === null) {
         await subscriptionService.add(input);
@@ -203,6 +206,18 @@ export default function AddSubscriptionScreen() {
                 autoCapitalize="none"
                 style={inputStyle}
                 accessibilityLabel="First charge date"
+              />
+            </Field>
+
+            <Field label="Free trial ends (optional)">
+              <TextInput
+                value={trialEnds}
+                onChangeText={setTrialEnds}
+                placeholder="YYYY-MM-DD"
+                placeholderTextColor={theme.textSecondary}
+                autoCapitalize="none"
+                style={inputStyle}
+                accessibilityLabel="Free trial end date"
               />
             </Field>
 

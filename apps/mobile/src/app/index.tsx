@@ -7,7 +7,13 @@ import { monthlyTotalsByCurrency, type Subscription } from '@subtrackr/domain';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { cycleLabel, formatMoney, subscriptionService, todayDateOnly } from '@/lib/subscriptions';
+import {
+  cycleLabel,
+  formatMoney,
+  subscriptionService,
+  todayDateOnly,
+  trialCountdownLabel,
+} from '@/lib/subscriptions';
 
 const ACCENT = '#208AEF';
 const CONTENT_MAX_WIDTH = 560;
@@ -104,64 +110,74 @@ export default function SubscriptionsScreen() {
                 Add a subscription to start tracking. Everything stays on this device.
               </ThemedText>
             ) : (
-              subs.map((sub) => (
-                <ThemedView key={sub.id} type="backgroundElement" style={styles.card}>
-                  <View style={styles.cardHeader}>
-                    <View style={styles.titleBlock}>
-                      <ThemedText type="smallBold" numberOfLines={1}>
-                        {sub.name}
-                      </ThemedText>
-                      {sub.category ? (
-                        <ThemedText type="small" themeColor="textSecondary">
-                          {sub.category}
+              subs.map((sub) => {
+                const trialDaysLeft = sub.trialDaysRemaining(today);
+                return (
+                  <ThemedView key={sub.id} type="backgroundElement" style={styles.card}>
+                    <View style={styles.cardHeader}>
+                      <View style={styles.titleBlock}>
+                        <ThemedText type="smallBold" numberOfLines={1}>
+                          {sub.name}
                         </ThemedText>
-                      ) : null}
+                        {sub.category ? (
+                          <ThemedText type="small" themeColor="textSecondary">
+                            {sub.category}
+                          </ThemedText>
+                        ) : null}
+                      </View>
+                      <View style={styles.priceBlock}>
+                        <ThemedText type="smallBold">{formatMoney(sub.amount)}</ThemedText>
+                        <ThemedText type="small" themeColor="textSecondary">
+                          {cycleLabel(sub.cycle)}
+                        </ThemedText>
+                      </View>
                     </View>
-                    <View style={styles.priceBlock}>
-                      <ThemedText type="smallBold">{formatMoney(sub.amount)}</ThemedText>
+
+                    <View style={styles.metaRow}>
                       <ThemedText type="small" themeColor="textSecondary">
-                        {cycleLabel(sub.cycle)}
+                        Renews {sub.nextRenewalOnOrAfter(today).toISO()}
                       </ThemedText>
+                      <StatusBadge status={sub.status} />
                     </View>
-                  </View>
 
-                  <View style={styles.metaRow}>
-                    <ThemedText type="small" themeColor="textSecondary">
-                      Renews {sub.nextRenewalOnOrAfter(today).toISO()}
-                    </ThemedText>
-                    <StatusBadge status={sub.status} />
-                  </View>
-
-                  {sub.sharedWith !== undefined ? (
-                    <ThemedText type="small" style={styles.accentAction}>
-                      Split {sub.sharedWith} ways · your share {formatMoney(sub.myMonthlyCost())}/mo
-                    </ThemedText>
-                  ) : null}
-
-                  <View style={styles.actions}>
-                    <Pressable
-                      onPress={() => router.push({ pathname: '/add', params: { id: sub.id } })}
-                      accessibilityRole="button"
-                    >
+                    {sub.sharedWith !== undefined ? (
                       <ThemedText type="small" style={styles.accentAction}>
-                        Edit
+                        Split {sub.sharedWith} ways · your share {formatMoney(sub.myMonthlyCost())}
+                        /mo
                       </ThemedText>
-                    </Pressable>
-                    {sub.status !== 'cancelled' ? (
-                      <Pressable onPress={() => void togglePause(sub)} accessibilityRole="button">
+                    ) : null}
+
+                    {trialDaysLeft !== null ? (
+                      <ThemedText type="smallBold" style={styles.trial}>
+                        {trialCountdownLabel(trialDaysLeft)}
+                      </ThemedText>
+                    ) : null}
+
+                    <View style={styles.actions}>
+                      <Pressable
+                        onPress={() => router.push({ pathname: '/add', params: { id: sub.id } })}
+                        accessibilityRole="button"
+                      >
                         <ThemedText type="small" style={styles.accentAction}>
-                          {sub.status === 'active' ? 'Pause' : 'Resume'}
+                          Edit
                         </ThemedText>
                       </Pressable>
-                    ) : null}
-                    <Pressable onPress={() => void remove(sub.id)} accessibilityRole="button">
-                      <ThemedText type="small" themeColor="textSecondary">
-                        Remove
-                      </ThemedText>
-                    </Pressable>
-                  </View>
-                </ThemedView>
-              ))
+                      {sub.status !== 'cancelled' ? (
+                        <Pressable onPress={() => void togglePause(sub)} accessibilityRole="button">
+                          <ThemedText type="small" style={styles.accentAction}>
+                            {sub.status === 'active' ? 'Pause' : 'Resume'}
+                          </ThemedText>
+                        </Pressable>
+                      ) : null}
+                      <Pressable onPress={() => void remove(sub.id)} accessibilityRole="button">
+                        <ThemedText type="small" themeColor="textSecondary">
+                          Remove
+                        </ThemedText>
+                      </Pressable>
+                    </View>
+                  </ThemedView>
+                );
+              })
             )}
           </ScrollView>
         </SafeAreaView>
@@ -216,5 +232,6 @@ const styles = StyleSheet.create({
   metaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   actions: { flexDirection: 'row', gap: Spacing.four, paddingTop: Spacing.one },
   accentAction: { color: ACCENT },
+  trial: { color: '#e0912f' },
   badge: { textTransform: 'capitalize' },
 });

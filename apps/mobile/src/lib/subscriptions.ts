@@ -87,6 +87,17 @@ export function formatMoney(amount: Money): string {
   }
 }
 
+/** Human-readable free-trial countdown for a number of days remaining. */
+export function trialCountdownLabel(daysLeft: number): string {
+  if (daysLeft === 0) {
+    return 'Free trial ends today';
+  }
+  if (daysLeft === 1) {
+    return 'Free trial ends tomorrow';
+  }
+  return `Free trial: ${daysLeft} days left`;
+}
+
 /** Render integer minor units as an editable decimal string, e.g. 1799 to "17.99". */
 export function minorToInputString(amountMinor: bigint): string {
   const negative = amountMinor < 0n;
