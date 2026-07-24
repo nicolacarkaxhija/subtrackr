@@ -18,6 +18,8 @@ export interface SubscriptionProps {
   readonly url?: string;
   readonly notes?: string;
   readonly catalogServiceId?: string;
+  /** People sharing this plan equally, including the user (>= 2). Omit if not shared. */
+  readonly sharedWith?: number;
 }
 
 /** Normalized, fully-validated internal shape (status resolved, strings trimmed). */
@@ -45,6 +47,12 @@ export class Subscription {
     }
     if (props.trialEndsAt !== undefined && props.trialEndsAt.isBefore(props.anchorDate)) {
       throw new RangeError('Subscription trial cannot end before the anchor date');
+    }
+    if (
+      props.sharedWith !== undefined &&
+      (!Number.isInteger(props.sharedWith) || props.sharedWith < 2)
+    ) {
+      throw new RangeError('Shared plan must include at least 2 people');
     }
 
     return new Subscription({
@@ -103,15 +111,27 @@ export class Subscription {
     return this.props.catalogServiceId;
   }
 
+  get sharedWith(): number | undefined {
+    return this.props.sharedWith;
+  }
+
   /** The next renewal date on or after `from`, derived from the anchor and cycle. */
   nextRenewalOnOrAfter(from: DateOnly): DateOnly {
     return this.props.cycle.nextRenewalOnOrAfter(this.props.anchorDate, from);
   }
 
-  /** This subscription's cost normalized to a monthly equivalent (same currency). */
+  /** The whole plan's cost normalized to a monthly equivalent (same currency). */
   monthlyCost(): Money {
     const { numerator, denominator } = this.props.cycle.monthlyEquivalentFactor();
     return this.props.amount.mulDiv(numerator, denominator);
+  }
+
+  /** The user's monthly cost: their equal share when shared, else the whole cost. */
+  myMonthlyCost(): Money {
+    const monthly = this.monthlyCost();
+    return this.props.sharedWith === undefined
+      ? monthly
+      : monthly.equalShare(this.props.sharedWith);
   }
 
   /** Whether the free trial is still running on `on` (inclusive of the end date). */

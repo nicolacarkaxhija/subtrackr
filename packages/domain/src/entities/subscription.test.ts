@@ -140,6 +140,38 @@ describe('Subscription.nextRenewalOnOrAfter', () => {
   });
 });
 
+describe('Subscription shared plans', () => {
+  it('defaults to no shared plan, so my cost equals the full cost', () => {
+    const s = make();
+    expect(s.sharedWith).toBeUndefined();
+    expect(s.myMonthlyCost().amountMinor).toBe(s.monthlyCost().amountMinor);
+  });
+
+  it('splits my monthly cost equally when shared', () => {
+    const s = make({
+      amount: Money.of(1799, 'EUR'),
+      cycle: BillingCycle.monthly(),
+      sharedWith: 4,
+    });
+    expect(s.sharedWith).toBe(4);
+    expect(s.myMonthlyCost().amountMinor).toBe(450n); // 17.99 / 4, payer share
+  });
+
+  it('splits the monthly-equivalent for non-monthly cycles', () => {
+    const s = make({
+      amount: Money.of(8990, 'EUR'),
+      cycle: BillingCycle.annual(),
+      sharedWith: 2,
+    });
+    // 8990 annual -> 749 monthly -> 374.5 -> payer 375
+    expect(s.myMonthlyCost().amountMinor).toBe(375n);
+  });
+
+  it.each([1, 0, -1, 1.5])('rejects a shared count that is not at least 2 (%s)', (n) => {
+    expect(() => make({ sharedWith: n })).toThrow(/at least 2/i);
+  });
+});
+
 describe('Subscription.monthlyCost', () => {
   it('returns the amount unchanged for a monthly cycle', () => {
     expect(make().monthlyCost().amountMinor).toBe(1799n);

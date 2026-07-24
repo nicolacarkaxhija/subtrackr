@@ -99,6 +99,22 @@ export class Money {
     return new Money(quotient, this.currency);
   }
 
+  /**
+   * The payer's share of this amount split equally into `parts` parts: the base share
+   * plus any indivisible remainder unit (matching `allocate` position zero). e.g. 17.99
+   * split 4 ways gives the payer 4.50 while the others pay 4.49.
+   */
+  equalShare(parts: number): Money {
+    if (!Number.isInteger(parts) || parts < 1) {
+      throw new RangeError(`Money.equalShare parts must be a positive integer, got ${parts}`);
+    }
+    const divisor = BigInt(parts);
+    const base = this.amountMinor / divisor;
+    const remainder = this.amountMinor % divisor;
+    const extra = remainder === 0n ? 0n : this.amountMinor < 0n ? -1n : 1n;
+    return new Money(base + extra, this.currency);
+  }
+
   negate(): Money {
     return new Money(-this.amountMinor, this.currency);
   }

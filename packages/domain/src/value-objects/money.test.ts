@@ -121,6 +121,43 @@ describe('Money arithmetic', () => {
   });
 });
 
+describe('Money.equalShare', () => {
+  it('splits evenly when divisible', () => {
+    expect(eur(1000).equalShare(4).amountMinor).toBe(250n);
+  });
+
+  it('gives the payer (first share) the leftover unit', () => {
+    // 17.99 / 4 = 4.4975 -> my share 4.50, the other three pay 4.49
+    expect(eur(1799).equalShare(4).amountMinor).toBe(450n);
+  });
+
+  it('returns the full amount for a single-person split', () => {
+    expect(eur(1799).equalShare(1).amountMinor).toBe(1799n);
+  });
+
+  it('handles negative amounts', () => {
+    expect(eur(-1799).equalShare(4).amountMinor).toBe(-450n);
+  });
+
+  it('keeps the currency', () => {
+    expect(Money.of(1000, 'USD').equalShare(3).currency).toBe('USD');
+  });
+
+  it.each([0, -1, 1.5, Number.NaN])('rejects an invalid part count %s', (n) => {
+    expect(() => eur(100).equalShare(n)).toThrow(/parts/i);
+  });
+
+  it('matches allocate for the first share (property)', () => {
+    fc.assert(
+      fc.property(arbMinor, fc.integer({ min: 1, max: 50 }), (minor, parts) => {
+        const money = Money.of(minor, 'EUR');
+        const viaAllocate = money.allocate(new Array<number>(parts).fill(1))[0];
+        expect(money.equalShare(parts).amountMinor).toBe(viaAllocate?.amountMinor);
+      }),
+    );
+  });
+});
+
 describe('Money.mulDiv', () => {
   it('multiplies then divides exactly when divisible', () => {
     expect(eur(12000).mulDiv(1, 12).amountMinor).toBe(1000n); // annual to monthly

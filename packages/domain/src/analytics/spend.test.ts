@@ -51,6 +51,14 @@ describe('monthlyTotalsByCurrency', () => {
     ]);
   });
 
+  it('uses the user share for shared plans', () => {
+    const totals = monthlyTotalsByCurrency([
+      sub('a', { amount: Money.of(1799, 'EUR'), sharedWith: 4 }), // my share 450
+      sub('b', { amount: Money.of(1000, 'EUR') }), // 1000
+    ]);
+    expect(asPairs(totals)).toEqual([['EUR', 1450n]]);
+  });
+
   it('counts only active subscriptions', () => {
     const totals = monthlyTotalsByCurrency([
       sub('a', { amount: Money.of(1000, 'EUR') }),
