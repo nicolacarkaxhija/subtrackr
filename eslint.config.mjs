@@ -6,6 +6,8 @@ export default tseslint.config(
   {
     ignores: [
       '**/node_modules/**',
+      // The Expo app has its own toolchain (expo lint / its own tsconfig).
+      'apps/**',
       '**/dist/**',
       '**/build/**',
       '**/coverage/**',
