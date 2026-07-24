@@ -29,6 +29,20 @@ export class SubscriptionService {
     return subscription;
   }
 
+  /**
+   * Replace an existing subscription's editable fields, preserving its id and current
+   * status. Throws if the subscription is unknown or soft-deleted.
+   */
+  async update(id: string, input: AddSubscriptionInput): Promise<Subscription> {
+    const existing = await this.repository.findById(id);
+    if (existing === null) {
+      throw new RangeError(`Subscription "${id}" not found`);
+    }
+    const updated = Subscription.create({ ...input, id, status: existing.status });
+    await this.repository.save(updated);
+    return updated;
+  }
+
   /** All live subscriptions, oldest first. */
   list(): Promise<Subscription[]> {
     return this.repository.findAll();

@@ -129,6 +129,47 @@ describe('SubscriptionService', () => {
     });
   });
 
+  describe('update', () => {
+    it('changes fields and persists them', async () => {
+      const { id } = await service.add(input({ name: 'Netflix' }));
+      const updated = await service.update(
+        id,
+        input({ name: 'Netflix Premium', amount: Money.of(2199, 'EUR') }),
+      );
+      expect(updated.name).toBe('Netflix Premium');
+      expect(updated.amount.amountMinor).toBe(2199n);
+      expect((await service.get(id))?.name).toBe('Netflix Premium');
+    });
+
+    it('keeps the same id and preserves the current status', async () => {
+      const { id } = await service.add(input());
+      await service.pause(id);
+      const updated = await service.update(id, input({ name: 'Renamed' }));
+      expect(updated.id).toBe(id);
+      expect(updated.status).toBe('paused');
+    });
+
+    it('bumps the version and keeps the created timestamp', async () => {
+      const { id } = await service.add(input());
+      clock.advance(5000);
+      await service.update(id, input({ name: 'Renamed' }));
+      const record = await repository.getRecord(id);
+      expect(record?.version).toBe(2);
+      expect(record?.createdAt).toBe(1_000_000);
+      expect(record?.updatedAt).toBe(1_005_000);
+    });
+
+    it('throws not-found for an unknown id', async () => {
+      await expect(service.update('missing', input())).rejects.toThrow(/not found/i);
+    });
+
+    it('rejects invalid input and leaves the stored value unchanged', async () => {
+      const { id } = await service.add(input({ name: 'Netflix' }));
+      await expect(service.update(id, input({ name: '   ' }))).rejects.toThrow(/name/i);
+      expect((await service.get(id))?.name).toBe('Netflix');
+    });
+  });
+
   describe('remove', () => {
     it('soft-deletes so the subscription disappears from reads', async () => {
       const { id } = await service.add(input());
