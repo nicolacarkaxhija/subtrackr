@@ -10,6 +10,7 @@ section.
 
 | Commit (type/scope)                                 | Summary                                                                                                                                                                                                | Est. human effort |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `feat: free-trial grace-period countdowns`          | Trial-end field on the form + "Free trial: N days left" countdown on cards (in-app), using the tested domain trial math                                                                                | 1 – 1.5 h         |
 | `feat: shared plans (persist + UI)`                 | Codec serialization for sharedWith, add/edit form field, and per-card "your share" line                                                                                                                | 1 – 1.5 h         |
 | `feat: equal-split shared plans`                    | Money.equalShare (payer's share, absorbs remainder), Subscription.sharedWith + myMonthlyCost, spend uses the user share; TDD + property + mutation                                                     | 2 – 3 h           |
 | `feat: edit subscriptions`                          | Dual-mode form (id param loads and prefills, submits via the update use case) + Edit action on each card; verified in-browser                                                                          | 1.5 – 2 h         |
@@ -50,11 +51,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value |
-| ----------------------------- | ----- |
-| Commits logged                | 35    |
-| Estimated human effort (low)  | 82 h  |
-| Estimated human effort (high) | 128 h |
+| Metric                        | Value   |
+| ----------------------------- | ------- |
+| Commits logged                | 36      |
+| Estimated human effort (low)  | 83 h    |
+| Estimated human effort (high) | 129.5 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit

@@ -1,11 +1,17 @@
 ---
 id: feat-reminders
 title: Renewal & Grace-Period Reminders
-status: draft
+status: partial
 owner: nicola
 tier: free
 platforms: [ios, android, web]
 related: [mod-config-registry]
+implemented:
+  - packages/domain/src/entities/subscription.ts (isTrialActive, trialDaysRemaining)
+  - apps/mobile/src/app/index.tsx (in-app trial countdown on cards)
+notes: >
+  In-app grace-period countdowns ship. OS-scheduled push notifications (renewal and
+  trial alerts) are deferred; they lean native and web push is unreliable.
 ---
 
 # Renewal & Grace-Period Reminders

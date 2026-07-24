@@ -6,6 +6,8 @@ node_modules/
 # Expo
 .expo/
 dist/
+# Ad-hoc web export dirs used for local screenshots
+web*/
 web-build/
 expo-env.d.ts
 
