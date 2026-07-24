@@ -9,8 +9,10 @@ export type { Clock } from './time/clock';
 export type { SubscriptionRecord, SubscriptionRepository } from './ports/subscription-repository';
 export type { IdGenerator } from './ports/id-generator';
 export type { KeyValueStore } from './ports/key-value-store';
-export { monthlyTotalsByCurrency } from './analytics/spend';
+export { monthlyTotalsByCurrency, monthlyTotalInBase } from './analytics/spend';
 export { exportSubscriptionsToCsv } from './export/csv';
+export { BundledRates } from './rates/bundled-rates';
+export type { Rates } from './ports/rates';
 export { FeatureRegistry } from './features/feature-registry';
 export type {
   AxisBreakdown,

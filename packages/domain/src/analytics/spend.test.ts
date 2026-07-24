@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { monthlyTotalsByCurrency } from './spend';
+import { monthlyTotalInBase, monthlyTotalsByCurrency } from './spend';
 import { Subscription, type SubscriptionProps } from '../entities/subscription';
 import { Money } from '../value-objects/money';
 import { BillingCycle } from '../value-objects/billing-cycle';
 import { DateOnly } from '../value-objects/date-only';
+import { BundledRates } from '../rates/bundled-rates';
 
 const sub = (id: string, over: Partial<SubscriptionProps> = {}): Subscription =>
   Subscription.create({
@@ -66,5 +67,53 @@ describe('monthlyTotalsByCurrency', () => {
       sub('c', { amount: Money.of(9000, 'EUR'), status: 'cancelled' }),
     ]);
     expect(asPairs(totals)).toEqual([['EUR', 1000n]]);
+  });
+});
+
+describe('monthlyTotalInBase', () => {
+  const rates = new BundledRates();
+
+  it('is zero in the base currency for no subscriptions', () => {
+    const total = monthlyTotalInBase([], rates, 'EUR');
+    expect(total?.amountMinor).toBe(0n);
+    expect(total?.currency).toBe('EUR');
+  });
+
+  it('converts and sums active subscriptions into the base currency', () => {
+    const total = monthlyTotalInBase(
+      [
+        sub('a', { amount: Money.of(1000, 'EUR') }), // 10.00 EUR
+        sub('b', { amount: Money.of(1000, 'USD') }), // 10.00 USD -> 9.20 EUR
+      ],
+      rates,
+      'EUR',
+    );
+    expect(total?.amountMinor).toBe(1920n);
+  });
+
+  it('uses the user share for shared plans', () => {
+    const total = monthlyTotalInBase(
+      [sub('a', { amount: Money.of(2000, 'EUR'), sharedWith: 2 })], // share 10.00 EUR
+      rates,
+      'EUR',
+    );
+    expect(total?.amountMinor).toBe(1000n);
+  });
+
+  it('excludes paused and cancelled subscriptions', () => {
+    const total = monthlyTotalInBase(
+      [
+        sub('a', { amount: Money.of(1000, 'EUR') }),
+        sub('b', { amount: Money.of(5000, 'EUR'), status: 'paused' }),
+      ],
+      rates,
+      'EUR',
+    );
+    expect(total?.amountMinor).toBe(1000n);
+  });
+
+  it('returns null when a currency cannot be converted', () => {
+    const total = monthlyTotalInBase([sub('a', { amount: Money.of(1000, 'JPY') })], rates, 'EUR');
+    expect(total).toBeNull();
   });
 });
