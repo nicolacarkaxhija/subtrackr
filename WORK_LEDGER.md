@@ -10,6 +10,8 @@ section.
 
 | Commit (type/scope)                                 | Summary                                                                                                                                                                                                | Est. human effort |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `feat: CSV export from the app`                     | Export CSV action that downloads the file in the browser                                                                                                                                               | 0.5 – 1 h         |
+| `feat: CSV exporter + Money.toDecimalString`        | RFC-4180 exporter (BOM, CRLF, quoting, minor-unit round-trip) + decimal-string rendering (inverse of parse); TDD, 100% coverage & mutation                                                             | 2 – 3 h           |
 | `feat: catalog quick-add in the form`               | Type-ahead suggestions that autofill name, price, currency, cycle, category from the catalog                                                                                                           | 1 – 1.5 h         |
 | `feat: bundled service catalog + fuzzy search`      | @subtrackr/catalog package: curated ~30-service seed + ranked fuzzy search (exact/prefix/substring/subsequence, popularity ties); TDD, 100% coverage, 95% mutation                                     | 3 – 4 h           |
 | `feat: free-trial grace-period countdowns`          | Trial-end field on the form + "Free trial: N days left" countdown on cards (in-app), using the tested domain trial math                                                                                | 1 – 1.5 h         |
@@ -53,11 +55,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value |
-| ----------------------------- | ----- |
-| Commits logged                | 38    |
-| Estimated human effort (low)  | 87 h  |
-| Estimated human effort (high) | 135 h |
+| Metric                        | Value  |
+| ----------------------------- | ------ |
+| Commits logged                | 40     |
+| Estimated human effort (low)  | 89.5 h |
+| Estimated human effort (high) | 139 h  |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit

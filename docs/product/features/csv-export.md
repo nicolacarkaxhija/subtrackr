@@ -1,11 +1,17 @@
 ---
 id: feat-csv-export
 title: CSV Export / Data Portability
-status: draft
+status: partial
 owner: nicola
 tier: pro
 platforms: [ios, android, web]
 related: [privacy-policy, mod-data-model]
+implemented:
+  - packages/domain/src/export/csv.ts (RFC-4180 exporter, BOM, round-trip fidelity)
+  - apps/mobile/src/app/index.tsx (web download)
+notes: >
+  CSV export ships on web. JSON export and native file/share export are deferred. The
+  Pro entitlement gate is not enforced yet (no paywall in v1).
 ---
 
 # CSV Export / Data Portability
