@@ -53,6 +53,9 @@ importers:
       '@subtrackr/application':
         specifier: workspace:*
         version: link:../../packages/application
+      '@subtrackr/catalog':
+        specifier: workspace:*
+        version: link:../../packages/catalog
       '@subtrackr/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -148,6 +151,28 @@ importers:
       '@subtrackr/persistence':
         specifier: workspace:*
         version: link:../persistence
+      '@vitest/coverage-v8':
+        specifier: ^2.1.2
+        version: 2.1.9(vitest@2.1.9(@types/node@22.20.1)(lightningcss@1.33.0)(terser@5.49.0))
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.2
+        version: 2.1.9(@types/node@22.20.1)(lightningcss@1.33.0)(terser@5.49.0)
+
+  packages/catalog:
+    dependencies:
+      '@subtrackr/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      '@stryker-mutator/core':
+        specifier: ^8.6.0
+        version: 8.7.1
+      '@stryker-mutator/vitest-runner':
+        specifier: ^8.6.0
+        version: 8.7.1(@stryker-mutator/core@8.7.1)(vitest@2.1.9(@types/node@22.20.1)(lightningcss@1.33.0)(terser@5.49.0))
       '@vitest/coverage-v8':
         specifier: ^2.1.2
         version: 2.1.9(vitest@2.1.9(@types/node@22.20.1)(lightningcss@1.33.0)(terser@5.49.0))
@@ -6708,7 +6733,9 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 
