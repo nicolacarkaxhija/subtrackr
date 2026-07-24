@@ -10,6 +10,8 @@ section.
 
 | Commit (type/scope)                                 | Summary                                                                                                                                                                                                | Est. human effort |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `feat: shared plans (persist + UI)`                 | Codec serialization for sharedWith, add/edit form field, and per-card "your share" line                                                                                                                | 1 – 1.5 h         |
+| `feat: equal-split shared plans`                    | Money.equalShare (payer's share, absorbs remainder), Subscription.sharedWith + myMonthlyCost, spend uses the user share; TDD + property + mutation                                                     | 2 – 3 h           |
 | `feat: edit subscriptions`                          | Dual-mode form (id param loads and prefills, submits via the update use case) + Edit action on each card; verified in-browser                                                                          | 1.5 – 2 h         |
 | `feat: update use case`                             | SubscriptionService.update (replace editable fields, preserve id and status); 100% coverage & mutation                                                                                                 | 1 – 1.5 h         |
 | `feat: add-subscription form`                       | Modal form (name, price + currency, cycle incl. custom, first-charge date, category) wired to the service; parsing reuses the domain; inline validation                                                | 2 – 3 h           |
@@ -48,11 +50,11 @@ section.
 
 ## Running total
 
-| Metric                        | Value   |
-| ----------------------------- | ------- |
-| Commits logged                | 33      |
-| Estimated human effort (low)  | 79 h    |
-| Estimated human effort (high) | 123.5 h |
+| Metric                        | Value |
+| ----------------------------- | ----- |
+| Commits logged                | 35    |
+| Estimated human effort (low)  | 82 h  |
+| Estimated human effort (high) | 128 h |
 
 > Methodology: estimates cover the equivalent hand-written work, not the elapsed
 > assisted time. Research/decision work captured in ADRs is attributed to the commit

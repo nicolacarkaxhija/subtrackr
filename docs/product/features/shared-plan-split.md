@@ -1,11 +1,17 @@
 ---
 id: feat-shared-plan
 title: Shared-Plan Splitting
-status: draft
+status: living
 owner: nicola
 tier: free
 platforms: [ios, android, web]
 related: [feat-analytics, mod-data-model]
+implemented:
+  - packages/domain/src/value-objects/money.ts (equalShare)
+  - packages/domain/src/entities/subscription.ts (sharedWith, myMonthlyCost)
+notes: >
+  v1 ships equal splitting by headcount (the payer absorbs the remainder unit). Named
+  members, custom weights, and fixed-amount modes from the spec below are deferred.
 ---
 
 # Shared-Plan Splitting
