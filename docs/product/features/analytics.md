@@ -7,12 +7,14 @@ tier: free
 platforms: [ios, android, web]
 related: [adr-0008, mod-data-model]
 implemented:
-  - packages/domain/src/analytics/spend.ts (monthly totals per currency)
+  - packages/domain/src/analytics/spend.ts (per-currency totals + base conversion)
   - packages/domain/src/value-objects/money.ts (mulDiv)
   - packages/domain/src/value-objects/billing-cycle.ts (monthlyEquivalentFactor)
+  - packages/domain/src/rates/bundled-rates.ts (bundled Rates for base conversion)
 notes: >
-  Per-currency totals ship; base-currency conversion (ADR 0008) is deferred until a
-  bundled Rates source lands.
+  Per-currency totals and base-currency conversion via bundled rates both ship (ADR
+  0008); the summary shows one approximate base total with the rate date disclosed. Live
+  exchange rates remain a deferred, opt-in option.
 ---
 
 # Multi-currency Spend Analytics
